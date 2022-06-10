@@ -19,6 +19,26 @@
   background-color: blue;
 }
 
+.gridBlack {
+  background-color: black;
+}
+
+.gridGrey {
+  background-color: gray;
+}
+
+.gridLightOrange {
+  background-color: lightsalmon;
+}
+
+.gridLightRed {
+  background-color: coral;
+}
+
+.gridRed {
+  background-color: crimson;
+}
+
 .gridItem {
   border-radius: 0;
 }
