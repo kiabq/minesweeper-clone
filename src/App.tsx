@@ -5,23 +5,32 @@ import styles from './App.module.css'
 interface gameArr {
   gArr: Array<number[]>,
   mArr: Set<number>,
+  cArr: Array<number>,
   initialized: boolean,
   gameOver: boolean
 }
 
 function checkClick(event: any) {
-  console.log(event)
-  switch(event.type) {
-    case "click":
-      return 0;
-    case "contextmenu":
-      window.oncontextmenu = (event) => {
-        event.preventDefault();
-      }
-      return 1;
+  switch(event.target.name) {
+    case "g_btn":
+      event.preventDefault();
+      break;
     default:
-      return "Error";
+      break;
   }
+}
+
+function pArr(inputArr: Array<number[]>, value: number) {
+  return [      
+    inputArr[value - 10],
+    inputArr[value - 9],
+    inputArr[value - 8],
+    inputArr[value - 1],
+    inputArr[value + 1],
+    inputArr[value + 8],
+    inputArr[value + 9],
+    inputArr[value + 10]
+  ]
 }
 
 class App extends React.Component<{}, gameArr>{
@@ -32,13 +41,16 @@ class App extends React.Component<{}, gameArr>{
     this.state = {
       gArr: [],
       mArr: new Set(),
+      cArr: [],
       initialized: false,
-      gameOver: false
+      gameOver: false,
     }
   } 
 
   // Generate gameboard on page load / app mount.
   componentDidMount() {
+    window.addEventListener('contextmenu', checkClick);
+
     let temp: number[][] = [];
     let main: number[][] = [[0,1,2,3,4,5,6,7,8], [0,1,2,3,4,5,6,7,8]];
 
@@ -51,23 +63,18 @@ class App extends React.Component<{}, gameArr>{
     this.setState({gArr: temp});
   };
 
+  // Cleanup
+  componentWillUnmount() {
+    window.removeEventListener('contextmenu', checkClick);
+  }
+
   createMines = (sSet: Set<number>, iArr: Array<number[]>, fClick: number) => {
 
-    let posArr: Array<number[]> = [
-      iArr[fClick - 10],
-      iArr[fClick - 9],
-      iArr[fClick - 8],
-      iArr[fClick - 1],
-      iArr[fClick + 1],
-      iArr[fClick + 8],
-      iArr[fClick + 9],
-      iArr[fClick + 10],
-    ]
-
+    let posArr = pArr(iArr, fClick);
     let posSet = new Set();
 
     posArr.forEach((item) => {
-      if (item != undefined) {
+      if (item !== undefined) {
         if (iArr[fClick][0] === 0 && item[0] - 9 === -1) {
           return;
         } else if (iArr[fClick][0] === 8 && item[0] - 1 === -1) {
@@ -75,7 +82,7 @@ class App extends React.Component<{}, gameArr>{
         } else {
           posSet.add(iArr.indexOf(item));
         }
-      } else if (item == undefined) {
+      } else if (item === undefined) {
         return;
       }
     })
@@ -90,32 +97,39 @@ class App extends React.Component<{}, gameArr>{
     }
   }
 
-  initMines = (inputArr: Array<number[]>, firstClick: number) => {
+  initMines = (gameboardArr: Array<number[]>, fClick: number) => {
     let tempStateSet: Set<number> = new Set();
-    this.createMines(tempStateSet, inputArr, firstClick);
+    this.createMines(tempStateSet, gameboardArr, fClick);
     this.setState({mArr: tempStateSet});
+    this.initClues(this.state.gArr, tempStateSet, fClick);
   }
   
-  clicked = (gArrPos: number[], e: any) => {
+  initClues = (input: Array<number[]>, tempInput: any, fClick: number) => {
+    let clues = [];
+
+    input.forEach((item) => {
+      let index = input.indexOf(item);
+      if (tempInput.has(index)) {
+        console.log(index, "mine")
+        return;
+      } else {
+        let tempArr = pArr(input, index);
+        let x = 0;
+        console.log(tempArr)
+        for (let i = 0; i < tempArr.length; i++) {
+          if (tempInput.has(tempArr[i])) {
+            x += 1;
+            console.log(x);
+          }
+        }
+
+        x = 0;
+      }
+    })
+  }
+
+  clicked = (gArrPos: number[]) => {
     let gArrPosIndex = this.state.gArr.indexOf(gArrPos);
-    // let mArrPosIndex = this.state.mArr.has(gArrPosIndex);
-    console.log(this.state.mArr);
-    const mArrPosIndex = (iArr: Set<number>, sVal: number, tVal: number) => {
-      if (iArr.has(sVal)) {
-        console.log((sVal - tVal) / 9, sVal);
-      }
-    }
-
-    let testVar = 0;
-    checkClick(e);
-
-
-    if (this.state.initialized) {
-      for (let i = 0; i < this.state.gArr.length + 1; i++) {
-        mArrPosIndex(this.state.mArr, testVar, gArrPosIndex);
-        testVar = testVar + 1;
-      }
-    }
 
     if (!this.state.initialized) {
       this.setState({initialized: true});
@@ -123,8 +137,6 @@ class App extends React.Component<{}, gameArr>{
     }
   }
 
-  // Map each generated position to own element.
-  // onClick returns array that was mapped to that particular element.
   render() {
     return (
       <div className={styles.page}>
@@ -134,9 +146,9 @@ class App extends React.Component<{}, gameArr>{
             return (
               <button 
                 className={`${styles.gridItem} ${this.state.mArr.has(index) && styles.gridMine}`} 
+                name={"g_btn"}
                 key={index} 
-                onClick={(e) => this.clicked(item, e)} 
-                onContextMenu={function(e) {checkClick(e)}}>
+                onClick={() => this.clicked(item)}>
                 {item}{this.state.mArr.has(index) && 1}
               </button>
             );
