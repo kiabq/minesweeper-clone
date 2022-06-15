@@ -162,11 +162,14 @@ class App extends React.Component<{}, gameState>{
       let y: Array<any> = [];
       borderCheck(x, clueArr, value, y);
 
-      if (initialized && clues[value] == undefined)  {
-        console.log("Game Over")
-      }
-      if (initialized && clues[value] != undefined) {
-        console.log(clues[value])
+      if (initialized)  {
+        switch (clues[value]) {
+          case undefined:
+            console.log("Game Over");
+            break;
+          default: 
+            y = [value];
+        }
       }
 
       y.forEach((item) => {
@@ -219,27 +222,38 @@ class App extends React.Component<{}, gameState>{
     let index;
 
     if (this.state.rArr.indexOf(item) >= 0) {
-      index = this.state.rArr.indexOf(item);
-      switch (index) {
-        case -1:
-          return;
-        default: 
-          return `${styles.gridGreen}`
-      }
-    } else {
       index = this.state.cArr[item];
-      switch (index) {
-        case undefined:
-          return `${styles.gridBlack}`;
-        case 0: 
-          return `${styles.gridGrey}`;
-        case 1:
-          return `${styles.gridLightOrange}`;
-        case 2:
-          return `${styles.gridLightRed}`;
-        default:
-          return `${styles.gridRed}`
+      
+
+      if (index === 0) {
+        return `${styles.gridGrey}`;
+      } else {
+        switch (index) {
+          case 1:
+            return `${styles.gridLightOrange}`;
+          case 2: 
+            return `${styles.gridLightRed}`;
+          case undefined:
+            return `${styles.gridBlack}`;
+          default:
+            return `${styles.gridRed}`;
+        }
       }
+
+    // } else {
+    //   index = this.state.cArr[item];
+    //   switch (index) {
+    //     case undefined:
+    //       return `${styles.gridBlack}`;
+    //     case 0: 
+    //       return `${styles.gridGrey}`;
+    //     case 1:
+    //       return `${styles.gridLightOrange}`;
+    //     case 2:
+    //       return `${styles.gridLightRed}`;
+    //     default:
+    //       return `${styles.gridRed}`
+    //   }
     }
   }
 
@@ -255,8 +269,7 @@ class App extends React.Component<{}, gameState>{
                 name={"g_btn"}
                 key={index} 
                 onClick={() => this.clicked(item)}>
-                {/* {item}{this.state.mArr.has(index) && 1} */}
-                {this.state.cArr[index] != 0 && this.state.cArr[index]}
+                {this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] != 0 && this.state.cArr[index]}
               </button>
             );
           })}
