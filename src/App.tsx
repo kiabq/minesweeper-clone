@@ -1,11 +1,13 @@
+import { click } from '@testing-library/user-event/dist/click';
 import * as React from 'react';
 import styles from './App.module.css'
 
 // Initial state shape
 interface gameState {
   gArr: Array<number[]>,
-  mArr: Set<number>,
   cArr: Array<number | undefined>,
+  mSet: Set<number>,
+  rArr: Array<any>,
   initialized: boolean,
   gameOver: boolean
 }
@@ -20,7 +22,7 @@ function checkClick(event: any) {
   }
 }
 
-function pArr(inputArr: Array<number[]>, value: number) {
+function pArr8(inputArr: Array<number[]>, value: number) {
   return [      
     inputArr[value - 10],
     inputArr[value - 9],
@@ -34,11 +36,13 @@ function pArr(inputArr: Array<number[]>, value: number) {
 }
 
 function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>) {
+  let selectedIndex = gameArr[index][0];
+  
   inputArr.forEach((item: any) => {
     if (item !== undefined) {
-      if (gameArr[index][0] === 0 && item[0] - 9 === -1) {
+      if (selectedIndex === 0 && item[0] - 9 === -1) {
         return;
-      } else if (gameArr[index][0] === 8 && item[0] - 1 === -1) {
+      } else if (selectedIndex === 8 && item[0] - 1 === -1) {
         return;
       } else if (inputObj instanceof Set) {
         inputObj.add(gameArr.indexOf(item));
@@ -57,8 +61,9 @@ class App extends React.Component<{}, gameState>{
 
     this.state = {
       gArr: [],
-      mArr: new Set(),
       cArr: [],
+      rArr: [],
+      mSet: new Set(),
       initialized: false,
       gameOver: false,
     }
@@ -90,7 +95,7 @@ class App extends React.Component<{}, gameState>{
   }
 
   createMines = (sSet: Set<number>, iArr: Array<number[]>, fClick: number) => {
-    let posArr = pArr(iArr, fClick);
+    let posArr = pArr8(iArr, fClick);
     let posSet: Set<number> = new Set();
     let rIndex;
 
@@ -110,7 +115,7 @@ class App extends React.Component<{}, gameState>{
     let tempStateSet: Set<number> = new Set();
     this.createMines(tempStateSet, gameboardArr, fClick);
     this.initClues(gameboardArr, tempStateSet, fClick);
-    this.setState({mArr: tempStateSet});
+    this.setState({mSet: tempStateSet});
   }
   
   initClues = (input: Array<number[]>, tempInput: any, fClick: number) => {
@@ -122,7 +127,7 @@ class App extends React.Component<{}, gameState>{
 
     input.forEach((item) => {
       index = input.indexOf(item)
-      tempArr = pArr(input, index);
+      tempArr = pArr8(input, index);
       tempClues = [];
       x = 0;
 
@@ -145,29 +150,64 @@ class App extends React.Component<{}, gameState>{
   }
 
   sweepMines = (clueArr: Array<number[]>, clickValue: number, clues: Array<number | undefined>) => {
-    let tempArr = clues;
-    let tempArr2 = pArr(clueArr, clickValue);
-    let x;
-    
-    for (let i = 0; i < tempArr2.length; i++) {
-      let x = clues[clueArr.indexOf(tempArr2[i])];
-      if (x === 0) {
-        return;
-      } else {
-        return;
+    let set: Set<number> = new Set();
+    let tempArr3: Array<any>, tempArr4: Array<any> = [];
+    let initBool: boolean = this.state.initialized;
+
+    set.add(clickValue);
+    tempArr3 = this.state.rArr;
+
+    function sweep(value: number, initialized?: boolean) {
+      let x = pArr8(clueArr, value);
+      let y: Array<any> = [];
+      borderCheck(x, clueArr, value, y);
+
+      if (initialized && clues[value] == undefined)  {
+        console.log("Game Over")
       }
+      if (initialized && clues[value] != undefined) {
+        console.log(clues[value])
+      }
+
+      y.forEach((item) => {
+        let bar = clues[item]
+        if (bar === 0) {
+          if (tempArr3.indexOf(item) === -1) {
+            tempArr3.push(item);
+            sweep(item);
+          }
+        } else if (bar === undefined) {
+          return;
+        } else {
+          set.add(item);
+          return;
+        }
+      })
+
     }
 
-    // tempArr.forEach((item) => {
-    //   if (item != undefined) {
-    //     tempArr2 = pArr(clueArr, clickValue)
-    //     console.log(tempArr2)
-    //   }
-    // })
+    sweep(clickValue, initBool);
+
+    tempArr3.forEach((item) => {
+      set.add(item);
+    })
+
+    let iterator: any = set.entries();
+    for (const entry of iterator) {
+      tempArr4.push(entry[0]);
+    }
+
+    this.setState({rArr: tempArr4})
+
   }
 
   clicked = (gArrPos: number[]) => {
     let gArrPosIndex = this.state.gArr.indexOf(gArrPos);
+    console.log(gArrPosIndex, gArrPos)
+
+    if (this.state.initialized) {
+      this.sweepMines(this.state.gArr, gArrPosIndex, this.state.cArr);
+    }
 
     if (!this.state.initialized) {
       this.setState({initialized: true});
@@ -176,21 +216,31 @@ class App extends React.Component<{}, gameState>{
   }
 
   testRender = (item: number) => {
-    let index = this.state.cArr[item]
-    switch (index) {
-      case undefined:
-        return `${styles.gridBlack}`;
-      case 0: 
-        return `${styles.gridGrey}`;
-      case 1:
-        return `${styles.gridLightOrange}`;
-      case 2:
-        return `${styles.gridLightRed}`;
-      default:
-        return `${styles.gridRed}`
-    }
+    let index;
 
-    
+    if (this.state.rArr.indexOf(item) >= 0) {
+      index = this.state.rArr.indexOf(item);
+      switch (index) {
+        case -1:
+          return;
+        default: 
+          return `${styles.gridGreen}`
+      }
+    } else {
+      index = this.state.cArr[item];
+      switch (index) {
+        case undefined:
+          return `${styles.gridBlack}`;
+        case 0: 
+          return `${styles.gridGrey}`;
+        case 1:
+          return `${styles.gridLightOrange}`;
+        case 2:
+          return `${styles.gridLightRed}`;
+        default:
+          return `${styles.gridRed}`
+      }
+    }
   }
 
   render() {
