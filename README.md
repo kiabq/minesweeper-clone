@@ -9,4 +9,4 @@ This is an app made as I was learning TypeScript. The general design of the game
 - (Maybe) Add animations and styling
 
 # Page Preview
-![ALT-TEXT](https://github.com/kiabq/milkshake-landing-page/blob/main/git1.gif)
+![ALT-TEXT](https://i.imgur.com/8ehJRlm.gif)
