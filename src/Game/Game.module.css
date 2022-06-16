@@ -1,0 +1,44 @@
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(10, 50px);
+    grid-template-columns: repeat(10, 50px);
+    height: max-content;
+    width: max-content;
+  }
+  
+  .gridMine {
+    background-color: blue;
+  }
+  
+  .gridBlack {
+    background-color: black;
+  }
+  
+  .gridGrey {
+    background-color: gray;
+  }
+  
+  .gridLightOrange {
+    background-color: lightsalmon;
+  }
+  
+  .gridLightRed {
+    background-color: coral;
+  }
+  
+  .gridRed {
+    background-color: crimson;
+  }
+  
+  .gridGreen {
+    background-color: lime;
+  }
+  
+  .gridItem {
+    border-radius: 0;
+  }
+  
+  .gridItem:hover {
+    background-color: lime;
+  }
