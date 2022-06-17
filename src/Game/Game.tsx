@@ -1,3 +1,4 @@
+import { isDisabled } from '@testing-library/user-event/dist/utils';
 import * as React from 'react';
 import styles from './Game.module.css'
 
@@ -6,10 +7,11 @@ interface GameState {
   gArr: Array<number[]>,
   cArr: Array<number | undefined>,
   mSet: Set<number>,
-  fSet: Set<number>,
+  fArr: Array<number[]>,
   rArr: Array<any>,
   initialized: boolean,
-  gameOver: boolean
+  gameOver: boolean,
+  flagAmount: number,
 }
 
 function checkClick(event: any) {
@@ -22,7 +24,7 @@ function checkClick(event: any) {
   }
 }
 
-let tdaGameboardParameters: number[][] = [[0,1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8,9]];
+let tdaGameboardParameters: Array<number[]> = [[0,1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8,9]];
 let tempMines = 18;
 
 function pArr8(inputArr: Array<number[]>, value: number) {
@@ -64,6 +66,14 @@ function pArr8(inputArr: Array<number[]>, value: number) {
   ]
 }
 
+function checkFlags(checkVal: number) {
+  if (checkVal > -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>) {
   let selectedIndex = gameArr[index][0];
 
@@ -84,6 +94,24 @@ function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index:
   })
 }
 
+function arraysEqual(a: Array<number>, b: Array<number>) {
+  let tempA = a;
+  let tempB = b;
+
+  tempA.sort((a, b) => a - b);
+  tempB.sort((a, b) => a - b);
+
+  if (a === b) return true;
+  if (a === null || b === null) return false;
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; i++) {
+    if (tempA[i] !== tempB[i]) return false;
+  }
+
+  return true;
+}
+
 class Game extends React.Component<{}, GameState>{
   constructor(props: any) {
     super(props);
@@ -93,9 +121,10 @@ class Game extends React.Component<{}, GameState>{
       cArr: [],
       rArr: [],
       mSet: new Set(),
-      fSet: new Set(),
+      fArr: [[],[]],
       initialized: false,
       gameOver: false,
+      flagAmount: 15
     }
   } 
 
@@ -116,7 +145,11 @@ class Game extends React.Component<{}, GameState>{
   };
 
   componentDidUpdate() {
-    console.log(this.state.fSet, this.state.mSet)
+    // console.log(this.state.fArr, this.state.mSet)
+    // console.log("Updated")
+    console.log(this.state.rArr.length, this.state.fArr[0].length);
+    console.log(arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)));
+    console.log(this.state.gameOver)
   }
 
   // Cleanup
@@ -202,7 +235,8 @@ class Game extends React.Component<{}, GameState>{
       }
 
       y.forEach((item) => {
-        let bar = clues[item]
+        let bar = clues[item];
+        
         if (bar === 0) {
           if (tempArr3.indexOf(item) === -1) {
             tempArr3.push(item);
@@ -228,50 +262,88 @@ class Game extends React.Component<{}, GameState>{
       tempArr4.push(entry[0]);
     }
 
-    tempArr4.sort()
+    tempArr4.sort();
     this.setState({rArr: tempArr4});
   }
   
-  flagged = (index: number) => {
-    let flagAmount = tempMines;
-    let tempFlagSet: Set<number> = this.state.fSet;
+  flagged = (index: number, unflipCheck?: boolean) => {
+    let tempFlagArr = this.state.fArr;   
+    let flagIndexOf = tempFlagArr[0].indexOf(index);
+    let unflippedIndexOf = tempFlagArr[1].indexOf(index);
 
-    tempFlagSet.add(index);
-    this.setState({fSet: tempFlagSet});
+    if (unflipCheck) {
+      tempFlagArr[1].splice(unflippedIndexOf, 1);
+    } else {
+      if (flagIndexOf > -1) {
+        tempFlagArr[0].splice(flagIndexOf, 1);
+      } else if (this.state.rArr.indexOf(index) === -1) {
+        tempFlagArr[0].push(index);
+        tempFlagArr[1].push(index);
+      } 
+    }
+
+    this.setState({fArr: tempFlagArr});
   }
 
   clicked = (gArrPos: number[]) => {
     let gArrPosIndex = this.state.gArr.indexOf(gArrPos);
+    let flagCheckArr = this.state.fArr[0].indexOf(gArrPosIndex);
+    let unflippedCheckArr = this.state.fArr[1].indexOf(gArrPosIndex);
 
-    if (this.state.initialized) {
-      this.sweepMines(this.state.gArr, gArrPosIndex, this.state.cArr);
+    if (this.state.mSet.has(gArrPosIndex)) {
+      this.setState({gameOver: true});
     }
 
-    if (!this.state.initialized) {
-      this.setState({initialized: true});
-      this.initMines(this.state.gArr, gArrPosIndex);
+    if (flagCheckArr > -1) {
+      return;
+    } else {
+      if (flagCheckArr === -1 && unflippedCheckArr > -1) {
+        this.flagged(gArrPosIndex, true);
+      }
+
+      if (this.state.initialized) {
+        this.sweepMines(this.state.gArr, gArrPosIndex, this.state.cArr);
+      }
+
+      if (!this.state.initialized) {
+        this.setState({initialized: true});
+        this.initMines(this.state.gArr, gArrPosIndex);
+      }
     }
   }
 
   testRender = (item: number) => {
-    let index;
+    console.log("Ran")
 
-    if (this.state.rArr.indexOf(item) >= 0) {
-      index = this.state.cArr[item];
-      
-      if (index === 0) {
-        return `${styles.gridGrey}`;
-      } else {
-        switch (index) {
-          case 1:
-            return `${styles.gridLightOrange}`;
-          case 2: 
-            return `${styles.gridLightRed}`;
-          case undefined:
-            return `${styles.gridBlack}`;
-          default:
-            return `${styles.gridRed}`;
+    let index = this.state.cArr[item];;
+    if (this.state.fArr[0].indexOf(item) > -1) {
+      return `${styles.gridBlue}`
+    } else if (this.state.fArr[1].indexOf(item) > -1) {
+      return;
+    } else {
+      if (this.state.rArr.indexOf(item) >= 0) {
+        
+        if (index === 0) {
+          return `${styles.gridGrey}`;
+        } else {
+          switch (index) {
+            case 1:
+              return `${styles.gridLightOrange}`;
+            case 2: 
+              return `${styles.gridLightRed}`;
+            case undefined:
+              return `${styles.gridBlack}`;
+            default:
+              return `${styles.gridRed}`;
+          }
         }
+      }
+    }
+
+    if (this.state.gameOver) {
+      switch (index) {
+        case undefined:
+          return `${styles.gridBlack}`
       }
     }
   }
@@ -284,11 +356,12 @@ class Game extends React.Component<{}, GameState>{
               <button 
                 className={`${styles.gridItem} ${this.state.initialized && this.testRender(index)}`} 
                 name={"g_btn"}
-                key={index} 
+                key={index}
                 onClick={() => this.clicked(item)}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
-                >
-                {this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] != 0 && this.state.cArr[index]}
+                disabled={this.state.gameOver}
+                > 
+                {checkFlags(this.state.fArr[1].indexOf(index)) || (this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] != 0 && this.state.cArr[index])} 
               </button>
             );
           })}

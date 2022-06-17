@@ -34,7 +34,15 @@
   .gridGreen {
     background-color: lime;
   }
+
+  .gridBlue {
+    background-color: blue;
+  }
   
+  .gridWhite {
+    background-color: white;
+  }
+
   .gridItem {
     border-radius: 0;
   }
