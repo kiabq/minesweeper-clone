@@ -145,8 +145,6 @@ class Game extends React.Component<{}, GameState>{
   };
 
   componentDidUpdate() {
-    // console.log(this.state.fArr, this.state.mSet)
-    // console.log("Updated")
     console.log(this.state.rArr.length, this.state.fArr[0].length);
     console.log(arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)));
     console.log(this.state.gameOver)
@@ -227,8 +225,7 @@ class Game extends React.Component<{}, GameState>{
       if (initialized)  {
         switch (clues[value]) {
           case undefined:
-            console.log("Game Over");
-            break;
+            return;
           default: 
             y = [value];
         }
@@ -285,6 +282,10 @@ class Game extends React.Component<{}, GameState>{
     this.setState({fArr: tempFlagArr});
   }
 
+  gameOver = () => {
+    this.setState({gameOver: true})
+  }
+
   clicked = (gArrPos: number[]) => {
     let gArrPosIndex = this.state.gArr.indexOf(gArrPos);
     let flagCheckArr = this.state.fArr[0].indexOf(gArrPosIndex);
@@ -313,8 +314,6 @@ class Game extends React.Component<{}, GameState>{
   }
 
   testRender = (item: number) => {
-    console.log("Ran")
-
     let index = this.state.cArr[item];;
     if (this.state.fArr[0].indexOf(item) > -1) {
       return `${styles.gridBlue}`
@@ -359,7 +358,6 @@ class Game extends React.Component<{}, GameState>{
                 key={index}
                 onClick={() => this.clicked(item)}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
-                disabled={this.state.gameOver}
                 > 
                 {checkFlags(this.state.fArr[1].indexOf(index)) || (this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] != 0 && this.state.cArr[index])} 
               </button>
