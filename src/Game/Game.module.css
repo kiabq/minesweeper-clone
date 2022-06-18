@@ -74,10 +74,6 @@
   border-radius: 0;
 }
 
-.gridItem:hover {
-  background-color: lime;
-}
-
 button {
   width: 16px;
   height: 16px;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import styles from './Game.module.css';
+import styles from './Game.modules.css';
 import GameFinish from './GameFinish';
 
 // Initial state shape
@@ -384,12 +384,12 @@ class Game extends React.Component<{}, GameState>{
     }
 
     // DEBUGGING MINES
-    if (this.state.initialized && this.state.gameOver) {
-      switch (index) {
-        case undefined:
-          return `${styles.gridBlack}`;
-      }
-    }
+    // if (this.state.initialized && this.state.gameOver) {
+    //   switch (index) {
+    //     case undefined:
+    //       return `${styles.gridBlack}`;
+    //   }
+    // }
   }
 
   render() {

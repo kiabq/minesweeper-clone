@@ -7,7 +7,7 @@ type GameFinishProps = {
 
 const GameFinish = (props: GameFinishProps) => {
     let { winCondition, isGameOver } = props
-
+    
     if (isGameOver) {
         if (winCondition) {
             return (
