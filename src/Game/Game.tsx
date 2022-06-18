@@ -351,18 +351,18 @@ class Game extends React.Component<{}, GameState>{
       }
     }
 
-    if (this.state.initialized) {
-      switch (index) {
-        case undefined:
-          return `${styles.gridBlack}`
-      }
-    }
+    // DEBUGGING MINES
+    // if (this.state.initialized) {
+    //   switch (index) {
+    //     case undefined:
+    //       return `${styles.gridBlack}`
+    //   }
+    // }
   }
 
   render() {
     return (
       <>
-
         <div className={styles.gridHeader}>
           <p>{this.state.flagAmount}</p>
         </div>
@@ -384,8 +384,7 @@ class Game extends React.Component<{}, GameState>{
           })}
         </div>
 
-        {this.state.gameOver && <GameFinish winCondition={arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0}/>}
-      
+       <GameFinish winCondition={arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0} isGameOver={this.state.gameOver}/>
       </>
     )
   }
