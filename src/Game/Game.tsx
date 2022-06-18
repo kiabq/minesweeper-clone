@@ -12,18 +12,23 @@ interface GameState {
   rArr: Array<any>,
   initialized: boolean,
   gameOver: boolean,
+  boardSize: number,
   flagAmount: number,
   minesAmount: number,
+  lClick: number | null
+}
+
+interface IAction {
+  type: string,
+
 }
 
 function checkClick(event: any) {
   switch(event.target.id) {
     case "d_ctx":
-      console.log(event.target)
       event.preventDefault();
       break;
     default:
-      console.log(event)
       break;
   }
 }
@@ -80,9 +85,7 @@ function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index:
       } else if (selectedIndex === tdaGameboardParameters[0].length - 1 && item[0] - 1 === -1) {
         return;
       } else if (inputObj instanceof Set) {
-        inputObj.add(gameArr.indexOf(item));{
-      
-        }
+        inputObj.add(gameArr.indexOf(item));
       } else {
         inputObj.push(gameArr.indexOf(item));
       }
@@ -134,8 +137,10 @@ class Game extends React.Component<{}, GameState>{
       fArr: [[],[]],
       initialized: false,
       gameOver: false,
+      boardSize: 16,
       flagAmount: 40,
       minesAmount: 40,
+      lClick: null
     }
   } 
 
@@ -143,15 +148,7 @@ class Game extends React.Component<{}, GameState>{
   componentDidMount() {
     window.addEventListener('contextmenu', checkClick);
 
-    let tdaGameboard: number[][] = [];
-
-    for (let i = 0; i < tdaGameboardParameters[0].length; i++) {
-      for (let j = 0; j < tdaGameboardParameters[1].length; j++) {
-        tdaGameboard.push([j, i]);
-      }
-    }
-    
-    this.setState({gArr: tdaGameboard});
+    this.makeBoard(this.state.boardSize, [] as Array<number[]>);
   };
 
   componentDidUpdate() {
@@ -163,6 +160,16 @@ class Game extends React.Component<{}, GameState>{
   // Cleanup
   componentWillUnmount() {
     window.removeEventListener('contextmenu', checkClick);
+  }
+
+  makeBoard = (parameters: number, arg: Array<any>) => {
+    for (let i = 0; i < parameters; i++) {
+      for (let j = 0; j < parameters; j++) {
+        arg.push([j, i]);
+      }
+    }
+
+    this.setState({gArr: arg});
   }
 
   createMines = (sSet: Set<number>, iArr: Array<number[]>, fClick: number) => {
@@ -309,7 +316,8 @@ class Game extends React.Component<{}, GameState>{
     let unflippedCheckArr = this.state.fArr[1].indexOf(gArrPosIndex);
 
     if (this.state.mSet.has(gArrPosIndex)) {
-      this.setState({gameOver: true});
+      this.gameOver();
+      this.setState({lClick: gArrPosIndex});
     }
 
     if (flagCheckArr > -1) {
@@ -330,6 +338,10 @@ class Game extends React.Component<{}, GameState>{
     }
   }
 
+  whileMouseDown = (e: any) => {
+    console.log(e)
+  }
+
   colorRender = (item: number) => {
     let index = this.state.cArr[item];
 
@@ -338,9 +350,12 @@ class Game extends React.Component<{}, GameState>{
         case undefined:
           if (this.state.fArr[0].indexOf(item) > -1) {
             return `${styles.gridBombFlagged}`;
+          } else if (item === this.state.lClick) {
+            return `${styles.gridBombExploded}`;
           } else {
             return `${styles.gridBomb}`;
           }
+
       }
     }
 
@@ -404,6 +419,7 @@ class Game extends React.Component<{}, GameState>{
                 key={index}
                 onClick={() => this.clicked(item)}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
+                onMouseDownCapture={() => (console.log(this))}
                 disabled={this.state.gameOver}
                 > 
               </button>
