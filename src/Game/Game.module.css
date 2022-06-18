@@ -6,8 +6,8 @@
 
 .grid {
   display: grid;
-  grid-template-rows: repeat(10, 16px);
-  grid-template-columns: repeat(10, 16px);
+  grid-template-rows: repeat(16, 16px);
+  grid-template-columns: repeat(16, 16px);
   height: max-content;
   width: max-content;
 }
@@ -74,5 +74,9 @@
 .gridItem {
   background: var(--sprite-img) no-repeat -27px -38px;
   border-radius: 0;
+}
+
+.board {
+  background-color: grey;
 }
 

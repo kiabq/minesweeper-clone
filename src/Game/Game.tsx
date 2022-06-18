@@ -17,17 +17,19 @@ interface GameState {
 }
 
 function checkClick(event: any) {
-  switch(event.target.name) {
-    case "g_btn":
+  switch(event.target.id) {
+    case "d_ctx":
+      console.log(event.target)
       event.preventDefault();
       break;
     default:
+      console.log(event)
       break;
   }
 }
 
 // This needs changed (very important!)
-let tdaGameboardParameters: Array<number[]> = [[0,1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8,9]];
+let tdaGameboardParameters: Array<number[]> = [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]];
 
 function pArr8(inputArr: Array<number[]>, value: number) {
   // This Function checks all eight indexes around the index passed, as well as 
@@ -68,14 +70,6 @@ function pArr8(inputArr: Array<number[]>, value: number) {
   ]
 }
 
-function checkFlags(checkVal: number) {
-  if (checkVal > -1) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>) {
   let selectedIndex = gameArr[index][0];
 
@@ -83,7 +77,7 @@ function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index:
     if (item !== undefined) {
       if (selectedIndex === 0 && item[0] - tdaGameboardParameters[0].length === -1) {
         return;
-      } else if (selectedIndex === 9 && item[0] - 1 === -1) {
+      } else if (selectedIndex === tdaGameboardParameters[0].length - 1 && item[0] - 1 === -1) {
         return;
       } else if (inputObj instanceof Set) {
         inputObj.add(gameArr.indexOf(item));{
@@ -140,8 +134,8 @@ class Game extends React.Component<{}, GameState>{
       fArr: [[],[]],
       initialized: false,
       gameOver: false,
-      flagAmount: 15,
-      minesAmount: 15,
+      flagAmount: 40,
+      minesAmount: 40,
     }
   } 
 
@@ -158,7 +152,6 @@ class Game extends React.Component<{}, GameState>{
     }
     
     this.setState({gArr: tdaGameboard});
-    tdaGameboard = [];
   };
 
   componentDidUpdate() {
@@ -179,7 +172,7 @@ class Game extends React.Component<{}, GameState>{
 
     borderCheck(posArr, iArr, fClick, posSet);
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < this.state.minesAmount; i++) {
       rIndex = Math.floor(Math.random() * iArr.length);
       if (rIndex === fClick || sSet.has(rIndex) || posSet.has(rIndex)) {
         i--;
@@ -201,15 +194,16 @@ class Game extends React.Component<{}, GameState>{
     let clues: GameState["cArr"] = [];
     let tempClues: Array<any>;
     let index: number;
-    
-    let tempArr, x;
+    let cluesAmount: number;
+
+    let tempArr;
 
     input.forEach((item) => {
       index = input.indexOf(item);
       tempClues = [];
       tempArr = pArr8(input, index);
-      x = 0;
-
+      cluesAmount = 0;
+      
       borderCheck(tempArr, input, index, tempClues);
 
       if (tempInput.has(index)) {
@@ -217,10 +211,10 @@ class Game extends React.Component<{}, GameState>{
       } else {
         for (let i = 0; i < tempClues.length; i++) {
           if (tempInput.has(tempClues[i]) === true) {
-            x++;
+            cluesAmount++; 
           }
         }
-        clues.push(x);
+        clues.push(cluesAmount);
       }
     })
 
@@ -394,9 +388,11 @@ class Game extends React.Component<{}, GameState>{
 
   render() {
     return (
-      <div className={styles.board}>
+      <div className={styles.board} id={"d_ctx"} >
         <div className={styles.gridHeader}>
           <p>{this.state.flagAmount}</p>
+          {/* <button>Reset</button>
+          <p>0</p> */}
         </div>
 
         <div className={styles.grid}>
@@ -404,7 +400,7 @@ class Game extends React.Component<{}, GameState>{
             return (
               <button 
                 className={`${this.colorRender(index)}`} 
-                name={"g_btn"}
+                id={"d_ctx"}
                 key={index}
                 onClick={() => this.clicked(item)}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}

@@ -5,4 +5,10 @@
   flex-direction: column;
   height: 100vh;
   width: 100vw;
+
+  background-color: #120914;
+}
+
+* {
+  color: white;
 }

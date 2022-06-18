@@ -3,7 +3,6 @@ This is an app made as I was learning TypeScript. The general design of the game
 
 # TODO
 - Update pArr8 function
-- Add flagging
 - Add timer
 - Add dropdown to select board size (Difficulty)
 - (Maybe) Add animations and styling
