@@ -1,3 +1,5 @@
+/* http://www.spritecow.com/ */
+
 :root {
   --sprite-img: url('../../public/images/ms-sprites-cut.png');
 }
@@ -41,7 +43,7 @@
   background: var(--sprite-img) no-repeat -117.5px -19.5px;
 }
 
-.girdSevenMine {
+.gridSevenMine {
   background: var(--sprite-img) no-repeat -135.5px -19.5px;
 }
 
@@ -74,7 +76,3 @@
   border-radius: 0;
 }
 
-button {
-  width: 16px;
-  height: 16px;
-}

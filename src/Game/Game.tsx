@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import styles from './Game.modules.css';
+import styles from './Game.module.css';
 import GameFinish from './GameFinish';
 
 // Initial state shape
@@ -179,7 +179,7 @@ class Game extends React.Component<{}, GameState>{
 
     borderCheck(posArr, iArr, fClick, posSet);
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 15; i++) {
       rIndex = Math.floor(Math.random() * iArr.length);
       if (rIndex === fClick || sSet.has(rIndex) || posSet.has(rIndex)) {
         i--;
