@@ -1,6 +1,7 @@
-import { isDisabled } from '@testing-library/user-event/dist/utils';
 import * as React from 'react';
-import styles from './Game.module.css'
+
+import styles from './Game.module.css';
+import GameFinish from './GameFinish';
 
 // Initial state shape
 interface GameState {
@@ -12,6 +13,7 @@ interface GameState {
   initialized: boolean,
   gameOver: boolean,
   flagAmount: number,
+  minesAmount: number,
 }
 
 function checkClick(event: any) {
@@ -25,7 +27,6 @@ function checkClick(event: any) {
 }
 
 let tdaGameboardParameters: Array<number[]> = [[0,1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8,9]];
-let tempMines = 18;
 
 function pArr8(inputArr: Array<number[]>, value: number) {
   // This Function checks all eight indexes around the index passed, as well as 
@@ -124,7 +125,8 @@ class Game extends React.Component<{}, GameState>{
       fArr: [[],[]],
       initialized: false,
       gameOver: false,
-      flagAmount: 15
+      flagAmount: 15,
+      minesAmount: 15,
     }
   } 
 
@@ -145,9 +147,9 @@ class Game extends React.Component<{}, GameState>{
   };
 
   componentDidUpdate() {
-    console.log(this.state.rArr.length, this.state.fArr[0].length);
-    console.log(arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)));
-    console.log(this.state.gameOver)
+    if (this.state.initialized && this.state.gameOver === false && arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0) {
+      this.gameOver();
+    }
   }
 
   // Cleanup
@@ -162,7 +164,7 @@ class Game extends React.Component<{}, GameState>{
 
     borderCheck(posArr, iArr, fClick, posSet);
 
-    for (let i = 0; i < tempMines; i++) {
+    for (let i = 0; i < this.state.minesAmount; i++) {
       rIndex = Math.floor(Math.random() * iArr.length);
       if (rIndex === fClick || sSet.has(rIndex) || posSet.has(rIndex)) {
         i--;
@@ -273,7 +275,11 @@ class Game extends React.Component<{}, GameState>{
     } else {
       if (flagIndexOf > -1) {
         tempFlagArr[0].splice(flagIndexOf, 1);
+        this.setState({flagAmount: this.state.flagAmount + 1})
       } else if (this.state.rArr.indexOf(index) === -1) {
+        if (this.state.flagAmount > 0) {
+          this.setState({flagAmount: this.state.flagAmount - 1})
+        }
         tempFlagArr[0].push(index);
         tempFlagArr[1].push(index);
       } 
@@ -283,7 +289,7 @@ class Game extends React.Component<{}, GameState>{
   }
 
   gameOver = () => {
-    this.setState({gameOver: true})
+    this.setState({gameOver: true});
   }
 
   clicked = (gArrPos: number[]) => {
@@ -321,7 +327,6 @@ class Game extends React.Component<{}, GameState>{
       return;
     } else {
       if (this.state.rArr.indexOf(item) >= 0) {
-        
         if (index === 0) {
           return `${styles.gridGrey}`;
         } else {
@@ -345,25 +350,43 @@ class Game extends React.Component<{}, GameState>{
           return `${styles.gridBlack}`
       }
     }
+
+    if (this.state.initialized) {
+      switch (index) {
+        case undefined:
+          return `${styles.gridBlack}`
+      }
+    }
   }
 
   render() {
     return (
+      <>
+
+        <div className={styles.gridHeader}>
+          <p>{this.state.flagAmount}</p>
+        </div>
+
         <div className={styles.grid}>
           {this.state.gArr.map((item, index) => {
             return (
               <button 
-                className={`${styles.gridItem} ${this.state.initialized && this.testRender(index)}`} 
+                className={`${styles.gridItem} ${this.testRender(index)}`} 
                 name={"g_btn"}
                 key={index}
                 onClick={() => this.clicked(item)}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
+                disabled={this.state.gameOver}
                 > 
-                {checkFlags(this.state.fArr[1].indexOf(index)) || (this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] != 0 && this.state.cArr[index])} 
+                {checkFlags(this.state.fArr[1].indexOf(index)) || (this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] !== 0 && this.state.cArr[index])} 
               </button>
             );
           })}
         </div>
+
+        {this.state.gameOver && <GameFinish winCondition={arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0}/>}
+      
+      </>
     )
   }
 }
