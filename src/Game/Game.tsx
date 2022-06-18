@@ -13,14 +13,10 @@ interface GameState {
   initialized: boolean,
   gameOver: boolean,
   boardSize: number,
+  // Use difficulty setting to adjust flagAmount and minesAmount
   flagAmount: number,
   minesAmount: number,
   lClick: number | null
-}
-
-interface IAction {
-  type: string,
-
 }
 
 function checkClick(event: any) {
@@ -152,6 +148,7 @@ class Game extends React.Component<{}, GameState>{
   };
 
   componentDidUpdate() {
+    console.log(this.state);
     if (this.state.initialized && this.state.gameOver === false && arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0) {
       this.gameOver();
     }
@@ -338,8 +335,19 @@ class Game extends React.Component<{}, GameState>{
     }
   }
 
-  whileMouseDown = (e: any) => {
-    console.log(e)
+  reset = () => {
+    this.makeBoard(this.state.boardSize, [] as Array<number[]>)
+
+    this.setState({
+      cArr: [],
+      rArr: [],
+      fArr: [[],[]],
+      mSet: new Set(), 
+      initialized: false, 
+      gameOver: false,
+      flagAmount: 40,
+      lClick: null
+    });
   }
 
   colorRender = (item: number) => {
@@ -406,8 +414,8 @@ class Game extends React.Component<{}, GameState>{
       <div className={styles.board} id={"d_ctx"} >
         <div className={styles.gridHeader}>
           <p>{this.state.flagAmount}</p>
-          {/* <button>Reset</button>
-          <p>0</p> */}
+          <button onClick={this.reset} className={styles.reset}></button>
+          {/* <p>0</p> */}
         </div>
 
         <div className={styles.grid}>

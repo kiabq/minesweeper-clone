@@ -82,5 +82,10 @@
   background-color: lime;
 }
 
+.reset {
+  background: var(--sprite-img) -175px -15px;
+  width: 24px;
+  height: 24px;
+}
 
 
