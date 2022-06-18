@@ -11,17 +11,19 @@ const GameFinish = (props: GameFinishProps) => {
     if (isGameOver) {
         if (winCondition) {
             return (
-                <p>You Win</p>
+                <p>You win!</p>
             )
-        }
-        if (!winCondition) {
+        } else {
             return (
                 <p>You Lose!</p>
             )
         }
     }
+
     return (
-        <div></div>
+        <>
+            <p>In Play</p>
+        </>
     )
 }
 

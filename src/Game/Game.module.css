@@ -1,52 +1,84 @@
+:root {
+  --sprite-img: url('../../public/images/ms-sprites-cut.png');
+}
 
 .grid {
-    display: grid;
-    grid-template-rows: repeat(10, 50px);
-    grid-template-columns: repeat(10, 50px);
-    height: max-content;
-    width: max-content;
-  }
-  
-  .gridMine {
-    background-color: blue;
-  }
-  
-  .gridBlack {
-    background-color: black;
-  }
-  
-  .gridGrey {
-    background-color: gray;
-  }
-  
-  .gridLightOrange {
-    background-color: lightsalmon;
-  }
-  
-  .gridLightRed {
-    background-color: coral;
-  }
-  
-  .gridRed {
-    background-color: crimson;
-  }
-  
-  .gridGreen {
-    background-color: lime;
-  }
+  display: grid;
+  grid-template-rows: repeat(10, 16px);
+  grid-template-columns: repeat(10, 16px);
+  height: max-content;
+  width: max-content;
+}
+.gridBomb {
+  background: var(--sprite-img) no-repeat -91px -39.5px;
+}
 
-  .gridBlue {
-    background-color: blue;
-  }
-  
-  .gridWhite {
-    background-color: white;
-  }
+.gridGrey {
+  background: var(--sprite-img) no-repeat -47.5px -38px;
+}
 
-  .gridItem {
-    border-radius: 0;
-  }
-  
-  .gridItem:hover {
-    background-color: lime;
-  }
+.gridOneMine {
+  background: var(--sprite-img) no-repeat -28px -20px;
+}
+
+.gridTwoMine {
+  background: var(--sprite-img) no-repeat -46px -19.5px;
+}
+
+.gridThreeMine {
+  background: var(--sprite-img) no-repeat -63.5px -19.5px;
+}
+
+.gridFourMine {
+  background: var(--sprite-img) no-repeat -81.5px -19.5px;
+}
+
+.gridFiveMine {
+  background: var(--sprite-img) no-repeat -99.5px -19.5px;
+}
+
+.gridSixMine {
+  background: var(--sprite-img) no-repeat -117.5px -19.5px;
+}
+
+.girdSevenMine {
+  background: var(--sprite-img) no-repeat -135.5px -19.5px;
+}
+
+.gridEightMine {
+  background: var(--sprite-img) no-repeat -153.5px -19.5px;
+}
+
+.gridRed {
+  background-color: crimson;
+}
+
+.gridGreen {
+  background-color: lime;
+}
+
+.gridFlagged {
+  background: var(--sprite-img) no-repeat -67px -38px;
+}
+
+.gridWhite {
+  background-color: white;
+}
+
+.gridBombFlagged {
+  background-color: aqua;
+}
+
+.gridItem {
+  background: var(--sprite-img) no-repeat -27px -38px;
+  border-radius: 0;
+}
+
+.gridItem:hover {
+  background-color: lime;
+}
+
+button {
+  width: 16px;
+  height: 16px;
+}

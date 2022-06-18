@@ -26,6 +26,7 @@ function checkClick(event: any) {
   }
 }
 
+// This needs changed (very important!)
 let tdaGameboardParameters: Array<number[]> = [[0,1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8,9]];
 
 function pArr8(inputArr: Array<number[]>, value: number) {
@@ -85,7 +86,9 @@ function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index:
       } else if (selectedIndex === 9 && item[0] - 1 === -1) {
         return;
       } else if (inputObj instanceof Set) {
-        inputObj.add(gameArr.indexOf(item));
+        inputObj.add(gameArr.indexOf(item));{
+      
+        }
       } else {
         inputObj.push(gameArr.indexOf(item));
       }
@@ -113,9 +116,21 @@ function arraysEqual(a: Array<number>, b: Array<number>) {
   return true;
 }
 
+// const initialState: GameState = {
+//   gArr: [],
+//   cArr: [],
+//   mSet: new Set(),
+//   fArr: [[],[]],
+//   rArr: [],
+//   initialized: false,
+//   gameOver: false,
+//   flagAmount: 15,
+//   minesAmount: 15,
+// }
+
 class Game extends React.Component<{}, GameState>{
-  constructor(props: any) {
-    super(props);
+  constructor(p: {}) {
+    super(p);
 
     this.state = {
       gArr: [],
@@ -164,7 +179,7 @@ class Game extends React.Component<{}, GameState>{
 
     borderCheck(posArr, iArr, fClick, posSet);
 
-    for (let i = 0; i < this.state.minesAmount; i++) {
+    for (let i = 0; i < 25; i++) {
       rIndex = Math.floor(Math.random() * iArr.length);
       if (rIndex === fClick || sSet.has(rIndex) || posSet.has(rIndex)) {
         i--;
@@ -176,6 +191,7 @@ class Game extends React.Component<{}, GameState>{
 
   initMines = (gameboardArr: Array<number[]>, fClick: number) => {
     let tempStateSet: Set<number> = new Set();
+
     this.createMines(tempStateSet, gameboardArr, fClick);
     this.initClues(gameboardArr, tempStateSet, fClick);
     this.setState({mSet: tempStateSet});
@@ -185,6 +201,7 @@ class Game extends React.Component<{}, GameState>{
     let clues: GameState["cArr"] = [];
     let tempClues: Array<any>;
     let index: number;
+    
     let tempArr, x;
 
     input.forEach((item) => {
@@ -278,10 +295,10 @@ class Game extends React.Component<{}, GameState>{
         this.setState({flagAmount: this.state.flagAmount + 1})
       } else if (this.state.rArr.indexOf(index) === -1) {
         if (this.state.flagAmount > 0) {
+          tempFlagArr[0].push(index);
+          tempFlagArr[1].push(index);
           this.setState({flagAmount: this.state.flagAmount - 1})
         }
-        tempFlagArr[0].push(index);
-        tempFlagArr[1].push(index);
       } 
     }
 
@@ -319,12 +336,24 @@ class Game extends React.Component<{}, GameState>{
     }
   }
 
-  testRender = (item: number) => {
-    let index = this.state.cArr[item];;
+  colorRender = (item: number) => {
+    let index = this.state.cArr[item];
+
+    if (this.state.gameOver) {
+      switch (index) {
+        case undefined:
+          if (this.state.fArr[0].indexOf(item) > -1) {
+            return `${styles.gridBombFlagged}`;
+          } else {
+            return `${styles.gridBomb}`;
+          }
+      }
+    }
+
     if (this.state.fArr[0].indexOf(item) > -1) {
-      return `${styles.gridBlue}`
+      return `${styles.gridFlagged}`
     } else if (this.state.fArr[1].indexOf(item) > -1) {
-      return;
+      return `${styles.gridItem}`
     } else {
       if (this.state.rArr.indexOf(item) >= 0) {
         if (index === 0) {
@@ -332,37 +361,40 @@ class Game extends React.Component<{}, GameState>{
         } else {
           switch (index) {
             case 1:
-              return `${styles.gridLightOrange}`;
+              return `${styles.gridOneMine}`;
             case 2: 
-              return `${styles.gridLightRed}`;
-            case undefined:
-              return `${styles.gridBlack}`;
-            default:
-              return `${styles.gridRed}`;
+              return `${styles.gridTwoMine}`;
+            case 3:
+              return `${styles.gridThreeMine}`;
+            case 4:
+              return `${styles.gridFourMine}`;
+            case 5:
+              return `${styles.gridFiveMine}`;    
+            case 6:
+              return `${styles.gridSixMine}`;
+            case 7:
+              return `${styles.gridSevenMine}`;
+            case 8:
+              return `${styles.gridEightMine}`;    
           }
         }
-      }
-    }
-
-    if (this.state.gameOver) {
-      switch (index) {
-        case undefined:
-          return `${styles.gridBlack}`
+      } else {
+        return `${styles.gridItem}`
       }
     }
 
     // DEBUGGING MINES
-    // if (this.state.initialized) {
-    //   switch (index) {
-    //     case undefined:
-    //       return `${styles.gridBlack}`
-    //   }
-    // }
+    if (this.state.initialized && this.state.gameOver) {
+      switch (index) {
+        case undefined:
+          return `${styles.gridBlack}`;
+      }
+    }
   }
 
   render() {
     return (
-      <>
+      <div className={styles.board}>
         <div className={styles.gridHeader}>
           <p>{this.state.flagAmount}</p>
         </div>
@@ -371,21 +403,20 @@ class Game extends React.Component<{}, GameState>{
           {this.state.gArr.map((item, index) => {
             return (
               <button 
-                className={`${styles.gridItem} ${this.testRender(index)}`} 
+                className={`${this.colorRender(index)}`} 
                 name={"g_btn"}
                 key={index}
                 onClick={() => this.clicked(item)}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
                 disabled={this.state.gameOver}
                 > 
-                {checkFlags(this.state.fArr[1].indexOf(index)) || (this.state.rArr.indexOf(index) >= 0 && this.state.cArr[index] !== 0 && this.state.cArr[index])} 
               </button>
             );
           })}
         </div>
-
+          
        <GameFinish winCondition={arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0} isGameOver={this.state.gameOver}/>
-      </>
+      </div>
     )
   }
 }
