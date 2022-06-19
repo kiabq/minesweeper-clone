@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import styles from './Game.module.css';
 import GameFinish from './GameFinish';
+import Timer from './Timer';
 
 // Initial state shape
 interface GameState {
@@ -13,6 +14,8 @@ interface GameState {
   initialized: boolean,
   gameOver: boolean,
   boardSize: number,
+  timer: number,
+  intervalID: ReturnType<typeof setInterval> | 0
   // Use difficulty setting to adjust flagAmount and minesAmount
   flagAmount: number,
   minesAmount: number,
@@ -136,6 +139,8 @@ class Game extends React.Component<{}, GameState>{
       boardSize: 16,
       flagAmount: 40,
       minesAmount: 40,
+      timer: 0,
+      intervalID: 0,
       lClick: null
     }
   } 
@@ -148,7 +153,7 @@ class Game extends React.Component<{}, GameState>{
   };
 
   componentDidUpdate() {
-    console.log(this.state);
+    console.log(this.state)
     if (this.state.initialized && this.state.gameOver === false && arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0) {
       this.gameOver();
     }
@@ -158,7 +163,7 @@ class Game extends React.Component<{}, GameState>{
   componentWillUnmount() {
     window.removeEventListener('contextmenu', checkClick);
   }
-
+  
   makeBoard = (parameters: number, arg: Array<any>) => {
     for (let i = 0; i < parameters; i++) {
       for (let j = 0; j < parameters; j++) {
@@ -167,6 +172,20 @@ class Game extends React.Component<{}, GameState>{
     }
 
     this.setState({gArr: arg});
+  }
+
+  handleTimer = () => {
+    if (this.state.intervalID) {
+      clearInterval(this.state.intervalID);
+      this.setState({intervalID: 0});
+      return;
+    }
+  
+    const interval = setInterval(() => {
+      this.setState({timer: this.state.timer + 1});
+    }, 1000);
+
+    this.setState({intervalID: interval});
   }
 
   createMines = (sSet: Set<number>, iArr: Array<number[]>, fClick: number) => {
@@ -305,6 +324,7 @@ class Game extends React.Component<{}, GameState>{
 
   gameOver = () => {
     this.setState({gameOver: true});
+    this.handleTimer();
   }
 
   clicked = (gArrPos: number[]) => {
@@ -331,11 +351,14 @@ class Game extends React.Component<{}, GameState>{
       if (!this.state.initialized) {
         this.setState({initialized: true});
         this.initMines(this.state.gArr, gArrPosIndex);
+        this.handleTimer();
       }
     }
   }
 
   reset = () => {
+    console.log(this.state);
+
     this.makeBoard(this.state.boardSize, [] as Array<number[]>)
 
     this.setState({
@@ -346,6 +369,8 @@ class Game extends React.Component<{}, GameState>{
       initialized: false, 
       gameOver: false,
       flagAmount: 40,
+      timer: 0,
+      intervalID: 0,
       lClick: null
     });
   }
@@ -374,7 +399,7 @@ class Game extends React.Component<{}, GameState>{
     } else {
       if (this.state.rArr.indexOf(item) >= 0) {
         if (index === 0) {
-          return `${styles.gridGrey}`;
+          return `${styles.gridTile}`;
         } else {
           switch (index) {
             case 1:
@@ -413,9 +438,9 @@ class Game extends React.Component<{}, GameState>{
     return (
       <div className={styles.board} id={"d_ctx"} >
         <div className={styles.gridHeader}>
-          <p>{this.state.flagAmount}</p>
+          <p className={styles.gridHeaderFlags}>{this.state.flagAmount}</p>
           <button onClick={this.reset} className={styles.reset}></button>
-          {/* <p>0</p> */}
+          <p className={styles.gridHeaderTimer}>{this.state.timer}</p>
         </div>
 
         <div className={styles.grid}>
@@ -425,9 +450,8 @@ class Game extends React.Component<{}, GameState>{
                 className={`${this.colorRender(index)}`} 
                 id={"d_ctx"}
                 key={index}
-                onClick={() => this.clicked(item)}
+                onClick={() => {this.clicked(item)}}
                 onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
-                onMouseDownCapture={() => (console.log(this))}
                 disabled={this.state.gameOver}
                 > 
               </button>
@@ -435,7 +459,7 @@ class Game extends React.Component<{}, GameState>{
           })}
         </div>
           
-       <GameFinish winCondition={arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0} isGameOver={this.state.gameOver}/>
+       {/* <GameFinish winCondition={arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0} isGameOver={this.state.gameOver}/> */}
       </div>
     )
   }

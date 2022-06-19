@@ -15,11 +15,24 @@
   height: max-content;
   width: max-content;
 }
-.gridBomb {
-  background: var(--sprite-img) no-repeat -89px -38px;
+
+.gridHeader {
+  display: flex;
+  justify-content: center;
+  padding: 5px 0 5px;
 }
 
-.gridGrey {
+.gridHeaderFlags {
+  text-align: center;
+  flex: 1;
+}
+
+.gridHeaderTimer {
+  text-align: center;
+  flex: 1;
+}
+
+.gridTile {
   background: var(--sprite-img) no-repeat -46px -37px;
 }
 
@@ -59,6 +72,10 @@
   background: var(--sprite-img) no-repeat -66px -37px;
 }
 
+.gridBomb {
+  background: var(--sprite-img) no-repeat -89px -38px;
+}
+
 .gridBombFlagged {
   background: var(--sprite-img) no-repeat -132px -37px;
 }
@@ -78,12 +95,9 @@
   border: none;
 }
 
-.gridGreen {
-  background-color: lime;
-}
-
 .reset {
   background: var(--sprite-img) -175px -15px;
+  border: none;
   width: 24px;
   height: 24px;
 }
