@@ -317,6 +317,7 @@ class Game extends React.Component<{}, GameState>{
   }
 
   gameOver = () => {
+    this.handleTimer();
     this.setState({gameOver: true});
   }
 
