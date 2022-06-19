@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styles from './Game.module.css';
 import GameFinish from './GameFinish';
-import Timer from './Timer';
+// import Timer from './Timer';
 
 // Initial state shape
 interface GameState {
