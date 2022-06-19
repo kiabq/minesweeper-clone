@@ -10,11 +10,6 @@ const App = () => {
     <div className={styles.page}>
       <h1>Minesweeper</h1>
 
-      <h2>How to play on Mobile:</h2>
-      <ul>
-        <li></li>
-      </ul>
-
       <Game />
       <Footer />
     </div>

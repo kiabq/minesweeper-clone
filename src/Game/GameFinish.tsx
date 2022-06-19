@@ -22,7 +22,6 @@ const GameFinish = (props: GameFinishProps) => {
 
     return (
         <>
-            <p>In Play</p>
         </>
     )
 }

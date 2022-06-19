@@ -17,22 +17,72 @@
 }
 
 .gridHeader {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   padding: 5px 0 5px;
 }
 
 .gridHeaderFlags {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   flex: 1;
 }
 
 .gridHeaderTimer {
-  text-align: center;
+  display:flex;
+  justify-content: center;
   flex: 1;
 }
 
-.gridTile {
+
+.gridNumberHW {
+  width: 12.5px;
+  height: 23px;
+}
+
+.gridNumberZero {
+  background: var(--sprite-img) no-repeat -203.2px -57px;
+}
+
+.gridNumberOne {
+  background: var(--sprite-img) no-repeat -68px -57px;
+}
+
+.gridNumberTwo {
+  background: var(--sprite-img) no-repeat -83px -57px;
+}
+
+.gridNumberThree {
+  background: var(--sprite-img) no-repeat -98px -57px;
+}
+
+.gridNumberFour {
+  background: var(--sprite-img) no-repeat -113px -57px;
+}
+
+.gridNumberFive {
+  background: var(--sprite-img) no-repeat -128px -57px;
+}
+
+.gridNumberSix {
+  background: var(--sprite-img) no-repeat -143px -57px;
+}
+
+.gridNumberSeven {
+  background: var(--sprite-img) no-repeat -158px -57px;
+}
+
+.gridNumberEight {
+  background: var(--sprite-img) no-repeat -173px -57px;
+}
+
+.gridNumberNine {
+  background: var(--sprite-img) no-repeat -188px -57px;
+}
+
+.gridFlipped {
   background: var(--sprite-img) no-repeat -46px -37px;
 }
 
@@ -84,7 +134,7 @@
   background: var(--sprite-img) no-repeat -111px -37px;
 }
 
-.gridItem {
+.gridUnflipped {
   background: var(--sprite-img) no-repeat -26px -37px;
   border-radius: 0;
   height: 16px;
