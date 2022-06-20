@@ -16,6 +16,7 @@
 
 .grid {
   border-radius: 2px;
+  border-width: 2px;
 
   display: grid;
   grid-template-rows: repeat(18, 16px);
@@ -30,6 +31,7 @@
   text-align: center;
 
   border-radius: 2px;
+  border-width: 3px;
 
   margin-bottom: 5px;
   padding: 5px 0 5px;

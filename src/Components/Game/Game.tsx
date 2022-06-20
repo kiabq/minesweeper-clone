@@ -293,7 +293,7 @@ class Game extends React.Component<{}, GameState>{
 
     if (unflipCheck) {
       tempFlagArr[1].splice(unflippedIndexOf, 1);
-    } else {
+    } else if (!this.state.gameOver) {
       if (flagIndexOf > -1) {
         tempFlagArr[0].splice(flagIndexOf, 1);
         this.setState({flagAmount: this.state.flagAmount + 1});

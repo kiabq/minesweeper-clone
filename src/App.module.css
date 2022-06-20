@@ -15,15 +15,15 @@
   background-color: #120914;
 }
 
+.page > div {
+  border-width: 3px;
+}
+
 .outsideB {
   border-top: solid var(--ms-white);
   border-right: solid var(--ms-dark-grey);
   border-bottom: solid var(--ms-dark-grey);
   border-left: solid var(--ms-white);
-}
-
-.window {
-  border: 5px;
 }
 
 .windowHeader {
@@ -48,6 +48,7 @@
 .windowButtons > button {
   display: flex;
   align-items: center;
+  justify-content: center;
 
   color: black;
   text-shadow: 1px 1px #fff;
