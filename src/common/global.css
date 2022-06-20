@@ -1,0 +1,14 @@
+@font-face {
+    font-family: levi-windows;
+    src: url('../..//public/fonts/Windows_Regular.ttf');
+}
+
+:root {
+    --ms-white: #fff;
+    --ms-grey: #c0c0c0;
+    --ms-dark-grey: #8f8f8f;
+    --ms-blue: #010081;
+    --ms-teal: #008080; 
+    --sprite-img: url('../../public/images/ms-sprites-cut-cropped.png');
+}
+

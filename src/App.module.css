@@ -1,3 +1,10 @@
+@font-face {
+  font-family: levi-windows;
+  src: url('../public/fonts/Windows_Regular.ttf');
+}
+
+@import url('common/global.css');
+
 .page {
   display: flex;
   align-items: center;
@@ -5,8 +12,64 @@
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-
   background-color: #120914;
+}
+
+.outsideB {
+  border-top: solid var(--ms-white);
+  border-right: solid var(--ms-dark-grey);
+  border-bottom: solid var(--ms-dark-grey);
+  border-left: solid var(--ms-white);
+}
+
+.window {
+  border: 5px;
+}
+
+.windowHeader {
+  display: flex;
+  align-items: center;
+
+  background-color: var(--ms-blue);
+}
+
+.windowName {
+  font-size: 1em;
+  font-family: levi-windows;
+}
+
+.windowButtons {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+  padding-right: 5px;
+}
+
+.windowButtons > button {
+  display: flex;
+  align-items: center;
+
+  color: black;
+  text-shadow: 1px 1px #fff;
+
+  background-color: var(--ms-grey);
+  border-width: 1px;
+  margin: 2px;
+  width: 16px;
+  height: 16px;
+
+  font-family: levi-windows;
+  font-size: 0.9em;
+}
+
+.windowButtons > button:hover {
+  display: flex;
+  background-color: var(--ms-dark-grey);
+}
+
+.windowLogo {
+  height: 25px;
+  margin: 0px 5px 0px;
 }
 
 * {
