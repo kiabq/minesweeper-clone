@@ -1,6 +1,6 @@
 /* http://www.spritecow.com/ */
 
-@import url('../../common/global.css');
+@import url('../../common/css/global.css');
 
 .board {
   background-color: var(--ms-grey);

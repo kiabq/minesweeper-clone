@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import styles from './Game.module.css';
 import borders from '../../common/css/borders.module.css';
+
 // Initial state shape
 // TODO:
 // Use difficulty setting to adjust flagAmount, minesAmount, and boardSize.
@@ -387,8 +388,6 @@ class Game extends React.Component<{}, GameState>{
 
       }
     }
-    
-
 
     if (this.state.fArr[0].indexOf(item) > -1) {
       return `${styles.gridFlagged}`
@@ -424,8 +423,6 @@ class Game extends React.Component<{}, GameState>{
         return `${styles.gridUnflipped}`
       }
     }
-
-
   }
 
   switchVals = (val: number) => {

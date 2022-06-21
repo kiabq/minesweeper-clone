@@ -1,6 +1,6 @@
 @font-face {
     font-family: levi-windows;
-    src: url('../..//public/fonts/Windows_Regular.ttf');
+    src: url('../../../public/fonts/Windows_Regular.ttf');
 }
 
 :root {
@@ -10,5 +10,5 @@
     --ms-black: #000000;
     --ms-blue: #010081;
     --ms-teal: #008080; 
-    --sprite-img: url('../../public/images/ms-sprites-cut-cropped.png');
+    --sprite-img: url('../../../public/images/ms-sprites-cut-cropped.png');
 }

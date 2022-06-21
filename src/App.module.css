@@ -1,4 +1,4 @@
-@import url('common/global.css');
+@import url('./common/css/global.css');
 
 .page {
   display: flex;

@@ -20,16 +20,8 @@
   font-family: levi-windows;
 }
 
-.windowControls > button > span {
+.windowControls > div > button > span {
   text-decoration: underline;
-}
-
-.active:hover, .active:focus:hover {
-    border: 2px solid black;
-    border-top: solid var(--ms-dark-grey);
-    border-right: solid var(--ms-white);
-    border-bottom: solid var(--ms-white);
-    border-left: solid var(--ms-dark-grey);
 }
 
 .windowControls > div > button:hover {
@@ -59,7 +51,7 @@
 
 .show > p {
     color: var(--ms-black);
-    margin: 2px 5px;
+    margin: 2px;
 }
 
 .show > p:hover {
