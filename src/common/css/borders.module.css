@@ -1,0 +1,13 @@
+.insideB {
+    border-top: solid var(--ms-dark-grey);
+    border-right: solid var(--ms-white);
+    border-bottom: solid var(--ms-white);
+    border-left: solid var(--ms-dark-grey);
+}
+
+.outsideB {
+    border-top: solid var(--ms-white);
+    border-right: solid var(--ms-dark-grey);
+    border-bottom: solid var(--ms-dark-grey);
+    border-left: solid var(--ms-white);
+}

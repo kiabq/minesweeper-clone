@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import styles from './Game.module.css';
-
+import borders from '../../common/css/borders.module.css';
 // Initial state shape
 // TODO:
 // Use difficulty setting to adjust flagAmount, minesAmount, and boardSize.
@@ -49,7 +49,7 @@ function pArr8(inputArr: Array<number[]>, value: number) {
     Middle: [19, 21]
     Bottom: [28, 29, 30]
 
-    The middle array is missing the value that was entered because it --
+    The middle array is missing the value that was entered because --
     we are only checking the eight indexes around the i
 
   */
@@ -146,7 +146,7 @@ class Game extends React.Component<{}, GameState>{
       this.gameOver();
     }
 
-    if (this.state.initialized && this.state.gameOver === false && arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0) {
+    if (this.state.initialized && this.state.gameOver === false && arraysEqual(this.state.fArr[0], Array.from(this.state.mSet)) && this.state.flagAmount === 0 && this.state.rArr.length === this.state.gArr.length - this.state.minesAmount) {
       this.gameOver();
       this.setState({setWin: true});
     }
@@ -236,11 +236,16 @@ class Game extends React.Component<{}, GameState>{
     let set: Set<number> = new Set();
     let tempArr3: Array<any>, tempArr4: Array<any> = [];
     let initBool: boolean = this.state.initialized;
+    let state = this.state
 
     set.add(clickValue);
     tempArr3 = this.state.rArr;
 
     function sweep(value: number, initialized?: boolean) {
+      if (state.fArr[0].indexOf(value) > -1) {
+        return;
+      }
+
       let x = pArr8(clueArr, value);
       let y: Array<any> = [];
       borderCheck(x, clueArr, value, y);
@@ -279,7 +284,9 @@ class Game extends React.Component<{}, GameState>{
 
     let iterator: any = set.entries();
     for (const entry of iterator) {
-      tempArr4.push(entry[0]);
+      if (this.state.fArr[0].indexOf(entry[0]) === -1) {
+        tempArr4.push(entry[0]);
+      }
     }
 
     tempArr4.sort();
@@ -300,7 +307,9 @@ class Game extends React.Component<{}, GameState>{
       } else if (this.state.rArr.indexOf(index) === -1) {
         if (this.state.flagAmount > 0) {
           tempFlagArr[0].push(index);
-          tempFlagArr[1].push(index);
+          if (this.state.fArr[1].indexOf(index) === -1) {
+            tempFlagArr[1].push(index);
+          }
           this.setState({flagAmount: this.state.flagAmount - 1})
         }
       } 
@@ -319,7 +328,7 @@ class Game extends React.Component<{}, GameState>{
     let flagCheckArr = this.state.fArr[0].indexOf(gArrPosIndex);
     let unflippedCheckArr = this.state.fArr[1].indexOf(gArrPosIndex);
 
-    if (this.state.mSet.has(gArrPosIndex)) {
+    if (flagCheckArr === - 1 && this.state.mSet.has(gArrPosIndex)) {
       this.gameOver();
       this.setState({lClick: gArrPosIndex});
     }
@@ -354,6 +363,7 @@ class Game extends React.Component<{}, GameState>{
       initialized: false, 
       gameOver: false,
       flagAmount: 50,
+      minesAmount: 50,
       timer: 0,
       intervalID: 0,
       lClick: null,
@@ -377,10 +387,14 @@ class Game extends React.Component<{}, GameState>{
 
       }
     }
+    
+
 
     if (this.state.fArr[0].indexOf(item) > -1) {
       return `${styles.gridFlagged}`
-    } else if (this.state.fArr[1].indexOf(item) > -1) {
+    }     
+
+    if (this.state.rArr.indexOf(item) === -1 && this.state.fArr[1].indexOf(item) > -1) {
       return `${styles.gridUnflipped}`
     } else {
       if (this.state.rArr.indexOf(item) >= 0) {
@@ -410,6 +424,8 @@ class Game extends React.Component<{}, GameState>{
         return `${styles.gridUnflipped}`
       }
     }
+
+
   }
 
   switchVals = (val: number) => {
@@ -482,10 +498,10 @@ class Game extends React.Component<{}, GameState>{
   render() {
     return (
       <div className={styles.board} >
-        <div className={`${styles.gridHeader} ${styles.insideB}`}>
+        <div className={`${styles.gridHeader} ${borders.insideB}`}>
 
           <div className={`${styles.gridHeaderFlags} `}>
-            <div className={`${styles.insideB}`}>
+            <div className={`${borders.insideB}`}>
               {this.digitRender(this.state.flagAmount)}  
             </div>
           </div>
@@ -495,14 +511,14 @@ class Game extends React.Component<{}, GameState>{
           </div>
 
           <div className={`${styles.gridHeaderTimer}`}>
-            <div className={`${styles.insideB}`}>
+            <div className={`${borders.insideB}`}>
               {this.digitRender(this.state.timer)}
             </div>
           </div>
 
         </div>
 
-        <div className={`${styles.grid} ${styles.insideB}`}>
+        <div className={` ${borders.insideB} ${styles.grid}`}>
           {this.state.gArr.map((item, index) => {
             return (
               <button 

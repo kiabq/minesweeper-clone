@@ -7,8 +7,8 @@
     --ms-white: #fff;
     --ms-grey: #c0c0c0;
     --ms-dark-grey: #8f8f8f;
+    --ms-black: #000000;
     --ms-blue: #010081;
     --ms-teal: #008080; 
     --sprite-img: url('../../public/images/ms-sprites-cut-cropped.png');
 }
-

@@ -4,19 +4,12 @@
 
 .board {
   background-color: var(--ms-grey);
-  padding: 5px;
-}
-
-.insideB {
-  border-top: solid var(--ms-dark-grey);
-  border-right: solid var(--ms-white);
-  border-bottom: solid var(--ms-white);
-  border-left: solid var(--ms-dark-grey);
+  padding-bottom: 5px;
 }
 
 .grid {
   border-radius: 2px;
-  border-width: 2px;
+  border-width: 3px;
 
   display: grid;
   grid-template-rows: repeat(18, 16px);
@@ -178,6 +171,10 @@
 }
 
 .grid > button {
+  border: none;
+}
+
+.grid > button:root {
   border: none;
 }
 

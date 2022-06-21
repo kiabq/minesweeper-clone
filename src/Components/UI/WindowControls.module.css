@@ -1,0 +1,73 @@
+
+.windowControls {
+    display: flex;
+    border-top: 1px solid var(--ms-dark-grey);
+    background-color: var(--ms-grey);
+    padding-bottom: 3px;
+
+    font-family: levi-windows;
+}
+
+.windowControls > div > button {
+    background-color: var(--ms-grey);
+    border: 2px solid #0000;
+    position: relative;
+    margin: 0;
+}
+
+.windowControls > div > button, span {
+  color: var(--ms-black);
+  font-family: levi-windows;
+}
+
+.windowControls > button > span {
+  text-decoration: underline;
+}
+
+.active:hover, .active:focus:hover {
+    border: 2px solid black;
+    border-top: solid var(--ms-dark-grey);
+    border-right: solid var(--ms-white);
+    border-bottom: solid var(--ms-white);
+    border-left: solid var(--ms-dark-grey);
+}
+
+.windowControls > div > button:hover {
+    border-top: solid var(--ms-white);
+    border-right: solid var(--ms-dark-grey);
+    border-bottom: solid var(--ms-dark-grey);
+    border-left: solid var(--ms-white);
+    border-width: 2px;
+}
+
+.windowDropdown {
+    float: left;
+    position: relative;
+}
+
+.show {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+
+    background-color: var(--ms-grey);
+    border-width: 2px !important;
+
+    text-align: center;
+    width: 75px;
+}
+
+.show > p {
+    color: var(--ms-black);
+    margin: 2px 5px;
+}
+
+.show > p:hover {
+    color: var(--ms-white);
+    background-color: var(--ms-blue);
+}
+
+.hidden {
+    display: none;
+}
+
