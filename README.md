@@ -1,6 +1,6 @@
 # Page Preview
 <p align="center">
-    ![ALT-TEXT](https://i.imgur.com/YdsFsoa.gif)
+    <img src="https://i.imgur.com/YdsFsoa.gif" />
 </p>
     
 # Purpose
