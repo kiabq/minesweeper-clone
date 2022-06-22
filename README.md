@@ -7,6 +7,7 @@ This is a Minesweeper clone based off of Windows 95/98 Minesweeper. It was made 
 There are few problems with this clone:
 
 1. Game loop is not performative because I made the mistake of using 'for' loops when rendering *everything*.
+    - On the topic of the game loop - the game does not look as it originally does (rectangular board instead of a square board.) due to how I'm rendering the board and using my ```borderCheck()``` and ```pArr8()``` functions in the ```<Game />``` component. I plan on changing this in the future to look as it did in the original.
 
 2. State management could be better. Currently the state is stored in the <Game /> component as one large object. I don't know if this is a bad idea or not, but it works.
 
