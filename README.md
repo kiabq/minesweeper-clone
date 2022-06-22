@@ -9,7 +9,7 @@ There are few problems with this clone:
 1. Game loop is not performative because I made the mistake of using 'for' loops when rendering *everything*.
     - On the topic of the game loop - the game does not look as it originally does (rectangular board instead of a square board.) due to how I'm rendering the board and using my ```borderCheck()``` and ```pArr8()``` functions in the ```<Game />``` component. I plan on changing this in the future to look as it did in the original.
 
-2. State management could be better. Currently the state is stored in the <Game /> component as one large object. I don't know if this is a bad idea or not, but it works.
+2. State management could be better. Currently the state is stored in the ```<Game />``` component as one large object. I don't know if this is a bad idea or not, but it works.
 
 3. Small micro-issues would be with the UI. The buttons are not as interactive as they were in the original version. With a tweaking of CSS and the Dropdown TSX code, it can be changed.
 
@@ -19,10 +19,10 @@ There are few problems with this clone:
 - From CLI, run ``` npm start ``` in installed directory.
 
 ## TODO
-- Finish <Rules /> component
+- Finish ```<Rules />``` component
 - Update README.md
 - Add animations and styling
 
 #### Cool things to add:
 
-- You can add a component to the game board to make it draggable. I used [this](https://codesandbox.io/s/condescending-dirac-rxwgx?file=/src/App.js) solution from [here](https://stackoverflow.com/a/39192992/11833883). It does add a neat effect, but I decided it was not worth keeping.
+- You can add a component to make the game board to make it draggable. I used [this](https://codesandbox.io/s/condescending-dirac-rxwgx?file=/src/App.js) solution from [here](https://stackoverflow.com/a/39192992/11833883). It does add a neat effect, but I decided it was not worth keeping.
