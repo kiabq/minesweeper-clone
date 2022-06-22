@@ -13,6 +13,8 @@
 .grid {
   border-radius: 2px;
   border-width: 3px;
+  grid-template-rows: repeat((18, 16px));
+  grid-template-columns: repeat(18, 16px);
 
   display: grid;
   height: max-content;

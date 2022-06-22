@@ -252,13 +252,14 @@ class Game extends React.Component<{diff: number}, GameState>{
     let set: Set<number> = new Set();
     let tempArr3: Array<any>, tempArr4: Array<any> = [];
 
+    let state = this.state;
     let dpArr8 = (arg1: number[][], arg2: number) => this.pArr8(arg1, arg2)
     let dborderCheck = (arg1: number[][], arg2: number[][], arg3: number, arg4: Set<number> | Array<number>) => this.borderCheck(arg1, arg2, arg3, arg4)
 
     set.add(clickValue);
     tempArr3 = this.state.rArr;
 
-    function sweep(value: number, state: GameState) {
+    function sweep(value: number, initialized?:boolean) {
       if (state.fArr[0].indexOf(value) > -1) {
         return;
       }
@@ -267,7 +268,7 @@ class Game extends React.Component<{diff: number}, GameState>{
       let y: Array<any> = [];
       dborderCheck(x, clueArr, value, y);
 
-      if (state.initialized)  {
+      if (initialized)  {
         switch (clues[value]) {
           case undefined:
             return;
@@ -282,7 +283,7 @@ class Game extends React.Component<{diff: number}, GameState>{
         if (bar === 0) {
           if (tempArr3.indexOf(item) === -1) {
             tempArr3.push(item);
-            sweep(item, state);
+            sweep(item);
           }
         } else if (bar === undefined) {
           return;
@@ -293,7 +294,7 @@ class Game extends React.Component<{diff: number}, GameState>{
       })
     }
 
-    sweep(clickValue, this.state);
+    sweep(clickValue, this.state.initialized);
 
     tempArr3.forEach((item) => {
       set.add(item);
