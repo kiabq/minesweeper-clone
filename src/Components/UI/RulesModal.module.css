@@ -1,0 +1,53 @@
+@import url('../../common/css/global.css');
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    background-color: var(--ms-grey);
+    width: 350px;
+    height: 500px;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-family: levi-windows;
+
+    z-index: 99;
+}
+
+.modal > img {
+    justify-content: center;
+    align-items: center;
+}
+
+.rules {    
+    padding: 5px;
+}
+
+.rulesHeader, .rulesLists {
+    text-align: center;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rulesLists {
+    padding: 0px 10px
+}
+
+.rulesLists > p {
+    text-align: center;
+}
+

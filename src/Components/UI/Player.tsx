@@ -7,18 +7,29 @@ const Player = () => {
     const [audio] = useState(new Audio(url));
     const [play, setPlay] = useState(false);
 
+    audio.volume = 0.1;
+
     const toggle = () => {
         setPlay(!play);
     }
 
-    if (play) {
-        audio.play();
-    } else {
-        audio.pause();
+    const playFunc = () => {  
+        if (play) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
     }
 
+    useEffect(() => {
+        audio.addEventListener('ended', () => (play && playFunc()));
+        return () => audio.removeEventListener('ended', () => (play && playFunc()));
+    })
+
+    playFunc();
+
     return (
-        <p onClick={() => toggle()}>{play ? "Pause" : "Play"} m</p>
+        <p onClick={() => toggle()}>{play ? "Pause" : "Play"}</p>
     )
 }   
 

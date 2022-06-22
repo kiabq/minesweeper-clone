@@ -52,6 +52,7 @@
 .show > p {
     color: var(--ms-black);
     margin: 2px;
+    user-select: none;
 }
 
 .show > p:hover {

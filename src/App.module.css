@@ -23,6 +23,7 @@
 .windowName {
   font-size: 1em;
   font-family: levi-windows;
+  padding-left: 5px;
 }
 
 .windowButtons {

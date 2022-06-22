@@ -4,15 +4,13 @@ import { useState, useEffect } from 'react';
 import WindowControls from './Components/UI/WindowControls';
 import Game from './Components/Game/Game';
 import Footer from './Components/UI/Footer';
-import { ErrorBoundary } from 'react-error-boundary';
 
 import styles from './App.module.css';
 import borders from './common/css/borders.module.css';
 
 const App = () => {
-  const bluescreen = () => {
-    throw new Error();
-  }
+  // Could use context API / State Management API here and in <Game />.
+  const [diff, setDiff] = useState<number>(16);
 
   return (
       <div className={styles.page}>
@@ -22,15 +20,13 @@ const App = () => {
             <h1 className={styles.windowName}>Minesweeper</h1>
             <div className={styles.windowButtons}>
               <button className={`${styles.windowMinimize} ${borders.outsideB}`}>_</button>
-              <button onClick={() => bluescreen()}className={`${styles.windowClose} ${borders.outsideB}`} >x</button>
+              <button className={`${styles.windowClose} ${borders.outsideB}`} >x</button>
             </div>
           </div>
-
-          <WindowControls />
-          <Game />
-
+          <WindowControls diff={diff} setDiff={setDiff}/>
+          <Game diff={diff}/>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
   )
 }

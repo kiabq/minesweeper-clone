@@ -3,19 +3,36 @@
 @import url('../../common/css/global.css');
 
 .board {
+  display: flex;
+  flex-direction: column;
   background-color: var(--ms-grey);
   padding-bottom: 5px;
 }
+
 
 .grid {
   border-radius: 2px;
   border-width: 3px;
 
   display: grid;
-  grid-template-rows: repeat(18, 16px);
-  grid-template-columns: repeat(18, 16px);
   height: max-content;
   width: max-content;
+  align-self: center;
+}
+
+.gridSizeE {
+  grid-template-rows: repeat(9, 16px);
+  grid-template-columns: repeat(9, 16px);
+}
+
+.gridSizeM {
+  grid-template-rows: repeat(16, 16px);
+  grid-template-columns: repeat(16, 16px);
+}
+
+.gridSizeL {
+  grid-template-rows: repeat(20, 16px);
+  grid-template-columns: repeat(20, 16px);
 }
 
 .gridHeader {

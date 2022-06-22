@@ -13,4 +13,4 @@ This is an app made as I was learning TypeScript. The general design of the game
 - From CLI, run ``` npm start ``` in installed directory.
 
 # Page Preview
-![ALT-TEXT](https://i.imgur.com/8ehJRlm.gif)
+![ALT-TEXT](https://i.imgur.com/YdsFsoa.gif)

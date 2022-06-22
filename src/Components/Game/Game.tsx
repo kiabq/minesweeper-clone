@@ -23,6 +23,19 @@ interface GameState {
   setWin: boolean
 }
 
+function setVal(arg: number) {
+  switch (arg) {
+    case 9:
+      return 16;
+    case 16:
+      return 50;
+    case 20:
+      return 70; 
+    default: 
+      return 50;
+  }
+}
+
 function checkClick(event: any) {
   switch(event.target.id) {
     case "d_ctx":
@@ -31,68 +44,6 @@ function checkClick(event: any) {
     default:
       break;
   }
-}
-
-// This needs changed (very important!)
-let tdaGameboardParameters: Array<number[]> = [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]];
-
-function pArr8(inputArr: Array<number[]>, value: number) {
-  // This Function checks all eight indexes around the index passed, as well as 
-  /* 
-
-    Would return something like this:
-
-    [10, 11, 12, 19, 21, 28, 29, 30]
-
-    Broken down, it would look like this:
-
-    Top: [10, 11, 12]
-    Middle: [19, 21]
-    Bottom: [28, 29, 30]
-
-    The middle array is missing the value that was entered because --
-    we are only checking the eight indexes around the i
-
-  */
-
-  let gameboardLength = tdaGameboardParameters[0].length;
-  
-  let sides = {
-    topL_botR: gameboardLength + 1,
-    topM_botM: gameboardLength,
-    topR_botL: gameboardLength - 1,
-  }
-
-  return [      
-    inputArr[value - sides.topL_botR], // Top Left Square
-    inputArr[value - sides.topM_botM], // Top Middle Square
-    inputArr[value - sides.topR_botL], // Top Right Square
-    inputArr[value - 1], // Center Left Square
-    inputArr[value + 1], // Center Right Square
-    inputArr[value + sides.topR_botL], // Bottom Left Square
-    inputArr[value + sides.topM_botM], // Bottom Middle Square
-    inputArr[value + sides.topL_botR] // Bottom Right Square
-  ]
-}
-
-function borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>) {
-  let selectedIndex = gameArr[index][0];
-
-  inputArr.forEach((item: any) => {
-    if (item !== undefined) {
-      if (selectedIndex === 0 && item[0] - tdaGameboardParameters[0].length === -1) {
-        return;
-      } else if (selectedIndex === tdaGameboardParameters[0].length - 1 && item[0] - 1 === -1) {
-        return;
-      } else if (inputObj instanceof Set) {
-        inputObj.add(gameArr.indexOf(item));
-      } else {
-        inputObj.push(gameArr.indexOf(item));
-      }
-    } else if (item === undefined) {
-      return;
-    }
-  })
 }
 
 function arraysEqual(a: Array<number>, b: Array<number>) {
@@ -113,8 +64,8 @@ function arraysEqual(a: Array<number>, b: Array<number>) {
   return true;
 }
 
-class Game extends React.Component<{}, GameState>{
-  constructor(p: {}) {
+class Game extends React.Component<{diff: number}, GameState>{
+  constructor(p: any) {
     super(p);
 
     this.state = {
@@ -125,9 +76,9 @@ class Game extends React.Component<{}, GameState>{
       fArr: [[],[]],
       initialized: false,
       gameOver: false,
-      boardSize: 18,
-      flagAmount: 50,
-      minesAmount: 50,
+      boardSize: this.props.diff,
+      flagAmount: setVal(this.props.diff),
+      minesAmount: setVal(this.props.diff),
       timer: 0,
       intervalID: 0,
       lClick: null,
@@ -151,6 +102,11 @@ class Game extends React.Component<{}, GameState>{
       this.gameOver();
       this.setState({setWin: true});
     }
+
+    if (this.state.boardSize != this.props.diff) {
+      this.makeBoard(this.props.diff, [] as Array<number[]>);
+      this.reset();
+    }
   }
 
   // Cleanup
@@ -168,6 +124,65 @@ class Game extends React.Component<{}, GameState>{
     this.setState({gArr: arg});
   }
 
+  pArr8(inputArr: Array<number[]>, value: number) {
+    // This Function checks all eight indexes around the index passed, as well as 
+    /* 
+  
+      Would return something like this:
+  
+      [10, 11, 12, 19, 21, 28, 29, 30]
+  
+      Broken down, it would look like this:
+  
+      Top: [10, 11, 12]
+      Middle: [19, 21]
+      Bottom: [28, 29, 30]
+  
+      The middle array is missing the value that was entered because --
+      we are only checking the eight indexes around the i
+  
+    */
+  
+    let gameboardLength = this.state.boardSize;
+    
+    let sides = {
+      topL_botR: gameboardLength + 1,
+      topM_botM: gameboardLength,
+      topR_botL: gameboardLength - 1,
+    }
+  
+    return [      
+      inputArr[value - sides.topL_botR], // Top Left Square
+      inputArr[value - sides.topM_botM], // Top Middle Square
+      inputArr[value - sides.topR_botL], // Top Right Square
+      inputArr[value - 1], // Center Left Square
+      inputArr[value + 1], // Center Right Square
+      inputArr[value + sides.topR_botL], // Bottom Left Square
+      inputArr[value + sides.topM_botM], // Bottom Middle Square
+      inputArr[value + sides.topL_botR] // Bottom Right Square
+    ]
+  }
+
+  borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>) {
+    let selectedIndex = gameArr[index][0];
+
+    inputArr.forEach((item: any) => {
+      if (item !== undefined) {
+        if (selectedIndex === 0 && item[0] - this.state.boardSize === -1) {
+          return;
+        } else if (selectedIndex === this.state.boardSize - 1 && item[0] - 1 === -1) {
+          return;
+        } else if (inputObj instanceof Set) {
+          inputObj.add(gameArr.indexOf(item));
+        } else {
+          inputObj.push(gameArr.indexOf(item));
+        }
+      } else if (item === undefined) {
+        return;
+      }
+    })
+  }
+
   handleTimer = () => {
     const interval = setInterval(() => {
       this.setState({timer: this.state.timer + 1});
@@ -177,11 +192,11 @@ class Game extends React.Component<{}, GameState>{
   }
 
   createMines = (sSet: Set<number>, iArr: Array<number[]>, fClick: number) => {
-    let posArr = pArr8(iArr, fClick);
+    let posArr = this.pArr8(iArr, fClick);
     let posSet: Set<number> = new Set();
     let rIndex;
 
-    borderCheck(posArr, iArr, fClick, posSet);
+    this.borderCheck(posArr, iArr, fClick, posSet);
 
     for (let i = 0; i < this.state.minesAmount; i++) {
       rIndex = Math.floor(Math.random() * iArr.length);
@@ -212,10 +227,10 @@ class Game extends React.Component<{}, GameState>{
     input.forEach((item) => {
       index = input.indexOf(item);
       tempClues = [];
-      tempArr = pArr8(input, index);
+      tempArr = this.pArr8(input, index);
       cluesAmount = 0;
       
-      borderCheck(tempArr, input, index, tempClues);
+      this.borderCheck(tempArr, input, index, tempClues);
 
       if (tempInput.has(index)) {
         clues.push(undefined);
@@ -236,22 +251,23 @@ class Game extends React.Component<{}, GameState>{
   sweepMines = (clueArr: Array<number[]>, clickValue: number, clues: Array<number | undefined>) => {
     let set: Set<number> = new Set();
     let tempArr3: Array<any>, tempArr4: Array<any> = [];
-    let initBool: boolean = this.state.initialized;
-    let state = this.state
+
+    let dpArr8 = (arg1: number[][], arg2: number) => this.pArr8(arg1, arg2)
+    let dborderCheck = (arg1: number[][], arg2: number[][], arg3: number, arg4: Set<number> | Array<number>) => this.borderCheck(arg1, arg2, arg3, arg4)
 
     set.add(clickValue);
     tempArr3 = this.state.rArr;
 
-    function sweep(value: number, initialized?: boolean) {
+    function sweep(value: number, state: GameState) {
       if (state.fArr[0].indexOf(value) > -1) {
         return;
       }
 
-      let x = pArr8(clueArr, value);
+      let x = dpArr8(clueArr, value);
       let y: Array<any> = [];
-      borderCheck(x, clueArr, value, y);
+      dborderCheck(x, clueArr, value, y);
 
-      if (initialized)  {
+      if (state.initialized)  {
         switch (clues[value]) {
           case undefined:
             return;
@@ -266,7 +282,7 @@ class Game extends React.Component<{}, GameState>{
         if (bar === 0) {
           if (tempArr3.indexOf(item) === -1) {
             tempArr3.push(item);
-            sweep(item);
+            sweep(item, state);
           }
         } else if (bar === undefined) {
           return;
@@ -277,7 +293,7 @@ class Game extends React.Component<{}, GameState>{
       })
     }
 
-    sweep(clickValue, initBool);
+    sweep(clickValue, this.state);
 
     tempArr3.forEach((item) => {
       set.add(item);
@@ -355,7 +371,6 @@ class Game extends React.Component<{}, GameState>{
 
   reset = () => {
     clearInterval(this.state.intervalID)
-    this.makeBoard(this.state.boardSize, [] as Array<number[]>);
     this.setState({
       cArr: [],
       rArr: [],
@@ -363,13 +378,27 @@ class Game extends React.Component<{}, GameState>{
       mSet: new Set(), 
       initialized: false, 
       gameOver: false,
-      flagAmount: 50,
-      minesAmount: 50,
+      boardSize: this.props.diff,
+      flagAmount: setVal(this.props.diff),
+      minesAmount: setVal(this.props.diff),
       timer: 0,
       intervalID: 0,
       lClick: null,
       setWin: false
     });
+  }
+
+  gridSize = () => {
+    switch (this.state.boardSize) {
+      case 9:
+        return `${styles.gridSizeE}`;
+      case 16:
+        return `${styles.gridSizeM}`;
+      case 20:
+        return `${styles.gridSizeL}`;
+      default:
+        return `${styles.gridSizeM}`;
+    }
   }
 
   colorRender = (item: number) => {
@@ -515,7 +544,7 @@ class Game extends React.Component<{}, GameState>{
 
         </div>
 
-        <div className={` ${borders.insideB} ${styles.grid}`}>
+        <div className={`${borders.insideB} ${styles.grid} ${this.gridSize()}`}>
           {this.state.gArr.map((item, index) => {
             return (
               <button 
