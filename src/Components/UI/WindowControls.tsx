@@ -38,7 +38,7 @@ const WindowControls = ({setDiff, diff}: WCProps) => {
     return (
         <div className={styles.windowControls}>
             <div id={"game"} className={`${styles.windowDropdown}`} onMouseLeave={() => handleLeave()}>
-                <button id={"game"} onMouseUp={(e) => showTab(e)}><span id="game">G</span>ame</button>
+                <button id={"game"} onMouseUp={(e) => showTab(e)}><span id="game">D</span>ifficulty</button>
                 <div className={`${show.showGame ? `${styles.show}` : `${styles.hidden}`} ${borders.outsideB}`}>
                     <p onClick={() => setDiff(9)}>{diff === 9 ? '>' : null}Easy</p>
                     <p onClick={() => setDiff(16)}>{diff === 16 ? '>' : null}Medium</p>
