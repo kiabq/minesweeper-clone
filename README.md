@@ -8,7 +8,7 @@ There are few problems with this clone:
 
 1. Game loop is not performative because I made the mistake of using 'for' loops when rendering *everything*.
 
-2. State management could be better. Currently the state is stored in the <Game /> component as one large object. I don't know if this is a bad idea or not, but it works.
+2. State management could be better. Currently the state is stored in the '<Game />' component as one large object. I don't know if this is a bad idea or not, but it works.
 
 3. Small micro-issues would be with the UI. The buttons are not as interactive as they were in the original version. With a tweaking of CSS and the Dropdown TSX code, it can be changed.
 
@@ -18,7 +18,7 @@ There are few problems with this clone:
 - From CLI, run ``` npm start ``` in installed directory.
 
 ## TODO
-- Finish <Rules /> component
+- Finish '<Rules />' component
 - Update README.md
 - Add animations and styling
 
