@@ -24,4 +24,4 @@ There are few problems with this clone:
 
 #### Cool things to add:
 
-- You can add a component to the game board to make it draggable. I used [this](https://codesandbox.io/s/condescending-dirac-rxwgx?file=/src/App.js) solution from [here](https://stackoverflow.com/a/39192992/11833883). It does add a neat effect, but I decided it was not worth keeping.
+- You can add a component to make the game board to make it draggable. I used [this](https://codesandbox.io/s/condescending-dirac-rxwgx?file=/src/App.js) solution from [here](https://stackoverflow.com/a/39192992/11833883). It does add a neat effect, but I decided it was not worth keeping.
