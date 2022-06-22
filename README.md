@@ -1,7 +1,8 @@
 # Page Preview
-<p align="center">
+<div align="center">
     <img src="https://i.imgur.com/YdsFsoa.gif" />
-</p>
+    <a href="https://msc-react.herokuapp.com/">View Site</a>
+</div>
     
 # Purpose
 This is a Minesweeper clone based off of Windows 95/98 Minesweeper. It was made using React/Typescript as a project to learn Typescript. (Finished)
