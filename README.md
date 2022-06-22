@@ -1,6 +1,8 @@
 # Page Preview
-![ALT-TEXT](https://i.imgur.com/YdsFsoa.gif)
-
+<p align="center">
+    ![ALT-TEXT](https://i.imgur.com/YdsFsoa.gif)
+</p>
+    
 # Purpose
 This is a Minesweeper clone based off of Windows 95/98 Minesweeper. It was made using React/Typescript as a project to learn Typescript. (Finished)
 
