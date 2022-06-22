@@ -97,6 +97,13 @@ const WindowControls = ({setDiff, diff}: WCProps) => {
                     <Player />
                 </div>
             </div>
+            <div className={`${styles.windowDropdown}`}>
+                <button>
+                    <a href="https://github.com/kiabq/minesweeper-clone" target="_blank">
+                        <span>G</span>it
+                    </a>    
+                </button>
+            </div>
         </div>
     )
 }

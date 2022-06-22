@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 
 import WindowControls from './Components/UI/WindowControls';
 import Game from './Components/Game/Game';
-import Footer from './Components/UI/Footer';
 
 import styles from './App.module.css';
 import borders from './common/css/borders.module.css';
@@ -26,7 +25,6 @@ const App = () => {
           <WindowControls diff={diff} setDiff={setDiff}/>
           <Game diff={diff}/>
         </div>
-        {/* <Footer /> */}
       </div>
   )
 }

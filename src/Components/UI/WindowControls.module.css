@@ -15,12 +15,14 @@
     margin: 0;
 }
 
-.windowControls > div > button, span {
+/* UUUUUUUUUU css is so tedious... next time use SCSS. */
+
+.windowControls > div > button, span, a {
   color: var(--ms-black);
   font-family: levi-windows;
 }
 
-.windowControls > div > button > span {
+span {
   text-decoration: underline;
 }
 
