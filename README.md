@@ -1,6 +1,8 @@
 # Page Preview
-![ALT-TEXT](https://i.imgur.com/YdsFsoa.gif)
-
+<div align="center">
+    <img src="https://i.imgur.com/YdsFsoa.gif" />
+</div>
+    
 # Purpose
 This is a Minesweeper clone based off of Windows 95/98 Minesweeper. It was made using React/Typescript as a project to learn Typescript. (Finished)
 
@@ -14,6 +16,8 @@ There are few problems with this clone:
 3. Small micro-issues would be with the UI. The buttons are not as interactive as they were in the original version. With a tweaking of CSS and the Dropdown TSX code, it can be changed.
 
 ## Install
+<a href="https://msc-react.herokuapp.com/" target="_blank">View Site</a>
+
 - Clone repository into directory of your choice.
 - (for package dependencies) ``` npm install ``` in installed  directory.
 - From CLI, run ``` npm start ``` in installed directory.
