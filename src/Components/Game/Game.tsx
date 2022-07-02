@@ -31,18 +31,10 @@ function setVal(arg: number) {
       return 50;
     case 20:
       return 70; 
+    case 25:
+      return 120;
     default: 
       return 50;
-  }
-}
-
-function checkClick(event: any) {
-  switch(event.target.id) {
-    case "d_ctx":
-      event.preventDefault();
-      break;
-    default:
-      break;
   }
 }
 
@@ -88,7 +80,6 @@ class Game extends React.Component<{diff: number}, GameState>{
 
   // Generate gameboard on page load / app mount.
   componentDidMount() {
-    window.addEventListener('contextmenu', checkClick);
     this.makeBoard(this.state.boardSize, [] as Array<number[]>);
   };
 
@@ -110,9 +101,7 @@ class Game extends React.Component<{diff: number}, GameState>{
   }
 
   // Cleanup
-  componentWillUnmount() {
-    window.removeEventListener('contextmenu', checkClick);
-  }
+  componentWillUnmount() {}
   
   makeBoard = (parameters: number, arg: Array<any>) => {
     for (let i = 0; i < parameters; i++) {
@@ -143,12 +132,12 @@ class Game extends React.Component<{diff: number}, GameState>{
   
     */
   
-    let gameboardLength = this.state.boardSize;
+    let gLength = this.state.boardSize;
     
     let sides = {
-      topL_botR: gameboardLength + 1,
-      topM_botM: gameboardLength,
-      topR_botL: gameboardLength - 1,
+      topL_botR: gLength + 1,
+      topM_botM: gLength,
+      topR_botL: gLength - 1,
     }
   
     return [      
@@ -163,7 +152,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     ]
   }
 
-  borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>) {
+  borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>): void {
     let selectedIndex = gameArr[index][0];
 
     inputArr.forEach((item: any) => {
@@ -208,7 +197,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     }
   }
 
-  initMines = (gameboardArr: Array<number[]>, fClick: number) => {
+  initMines = (gameboardArr: Array<number[]>, fClick: number): void => {
     let tempStateSet: Set<number> = new Set();
 
     this.createMines(tempStateSet, gameboardArr, fClick);
@@ -216,7 +205,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     this.setState({mSet: tempStateSet});
   }
   
-  initClues = (input: Array<number[]>, tempInput: any, fClick: number) => {
+  initClues = (input: Array<number[]>, tempInput: any, fClick: number): void => {
     let clues: GameState["cArr"] = [];
     let tempClues: Array<any>;
     let index: number;
@@ -248,7 +237,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     this.sweepMines(input, fClick, clues);
   }
 
-  sweepMines = (clueArr: Array<number[]>, clickValue: number, clues: Array<number | undefined>) => {
+  sweepMines = (clueArr: Array<number[]>, clickValue: number, clues: Array<number | undefined>): void => {
     let set: Set<number> = new Set();
     let tempArr3: Array<any>, tempArr4: Array<any> = [];
 
@@ -311,7 +300,9 @@ class Game extends React.Component<{diff: number}, GameState>{
     this.setState({rArr: tempArr4});
   }
   
-  flagged = (index: number, unflipCheck?: boolean) => {
+  flagged = (index: number, event: React.MouseEvent<HTMLButtonElement> | null, unflipCheck?: boolean, ) => {
+    event?.preventDefault();
+
     let tempFlagArr = this.state.fArr;   
     let flagIndexOf = tempFlagArr[0].indexOf(index);
     let unflippedIndexOf = tempFlagArr[1].indexOf(index);
@@ -355,7 +346,7 @@ class Game extends React.Component<{diff: number}, GameState>{
       return;
     } else {
       if (flagCheckArr === -1 && unflippedCheckArr > -1) {
-        this.flagged(gArrPosIndex, true);
+        this.flagged(gArrPosIndex, null, true);
       }
 
       if (this.state.initialized) {
@@ -371,7 +362,7 @@ class Game extends React.Component<{diff: number}, GameState>{
   }
 
   reset = () => {
-    clearInterval(this.state.intervalID)
+    clearInterval(this.state.intervalID);
     this.setState({
       cArr: [],
       rArr: [],
@@ -397,6 +388,8 @@ class Game extends React.Component<{diff: number}, GameState>{
         return `${styles.gridSizeM}`;
       case 20:
         return `${styles.gridSizeL}`;
+      case 25:
+        return `${styles.gridSizeVL}`;
       default:
         return `${styles.gridSizeM}`;
     }
@@ -534,7 +527,7 @@ class Game extends React.Component<{diff: number}, GameState>{
           </div>
 
           <div className={`${styles.gridHeaderReset}`}>
-            <button onClick={this.reset} id={"d_ctx"} className={`${styles.resetHW} ${this.resetRender()}`}></button>
+            <button onClick={this.reset} className={`${styles.resetHW} ${this.resetRender()}`}></button>
           </div>
 
           <div className={`${styles.gridHeaderTimer}`}>
@@ -550,10 +543,9 @@ class Game extends React.Component<{diff: number}, GameState>{
             return (
               <button 
                 className={`${this.colorRender(index)}`} 
-                id={"d_ctx"}
                 key={index}
                 onClick={() => {this.clicked(item)}}
-                onContextMenu={() => this.flagged(this.state.gArr.indexOf(item))}
+                onContextMenu={(e: React.MouseEvent<HTMLButtonElement>) => this.flagged(this.state.gArr.indexOf(item), e)}
                 disabled={this.state.gameOver}
                 >
               </button>

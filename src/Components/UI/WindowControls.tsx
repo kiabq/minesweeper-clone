@@ -43,6 +43,7 @@ const WindowControls = ({setDiff, diff}: WCProps) => {
                     <p onClick={() => setDiff(9)}>{diff === 9 ? '>' : null}Easy</p>
                     <p onClick={() => setDiff(16)}>{diff === 16 ? '>' : null}Medium</p>
                     <p onClick={() => setDiff(20)}>{diff === 20 ? '>' : null}Hard</p>
+                    <p onClick={() => setDiff(25)}>{diff === 25 ? '>' : null}Very Hard</p>
                 </div>
             </div>
             <div className={`${styles.windowDropdown}`} onMouseLeave={() => handleLeave()}>

@@ -37,6 +37,11 @@
   grid-template-columns: repeat(20, 16px);
 }
 
+.gridSizeVL {
+  grid-template-rows: repeat(25, 16px);
+  grid-template-columns: repeat(25, 16px);
+}
+
 .gridHeader {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
