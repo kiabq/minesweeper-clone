@@ -26,6 +26,8 @@ There are few problems with this clone:
 - Finish ```<Rules />``` component
 - Update README.md
 - Add animations and styling
+- Update borderCheck() to enable board to be rectangular
+- Add more difficulties
 
 #### Cool things to add:
 
