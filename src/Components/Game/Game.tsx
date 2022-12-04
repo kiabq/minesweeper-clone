@@ -94,7 +94,7 @@ class Game extends React.Component<{diff: number}, GameState>{
       this.setState({setWin: true});
     }
 
-    if (this.state.boardSize != this.props.diff) {
+    if (this.state.boardSize !== this.props.diff) {
       this.makeBoard(this.props.diff, [] as Array<number[]>);
       this.reset();
     }
@@ -126,10 +126,6 @@ class Game extends React.Component<{diff: number}, GameState>{
       Top: [10, 11, 12]
       Middle: [19, 21]
       Bottom: [28, 29, 30]
-  
-      The middle array is missing the value that was entered because --
-      we are only checking the eight indexes around the i
-  
     */
   
     let gLength = this.state.boardSize;
@@ -152,6 +148,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     ]
   }
 
+  // This function checks around each index to determine whether or not it is still on the gameboard or not.
   borderCheck(inputArr: Array<number[]>, gameArr: Array<number[]>, index: number, inputObj: Set<number> | Array<any>): void {
     let selectedIndex = gameArr[index][0];
 
@@ -242,13 +239,13 @@ class Game extends React.Component<{diff: number}, GameState>{
     let tempArr3: Array<any>, tempArr4: Array<any> = [];
 
     let state = this.state;
-    let dpArr8 = (arg1: number[][], arg2: number) => this.pArr8(arg1, arg2)
-    let dborderCheck = (arg1: number[][], arg2: number[][], arg3: number, arg4: Set<number> | Array<number>) => this.borderCheck(arg1, arg2, arg3, arg4)
+    let dpArr8 = (arg1: number[][], arg2: number) => this.pArr8(arg1, arg2);
+    let dborderCheck = (arg1: number[][], arg2: number[][], arg3: number, arg4: Set<number> | Array<number>) => this.borderCheck(arg1, arg2, arg3, arg4);
 
     set.add(clickValue);
     tempArr3 = this.state.rArr;
 
-    function sweep(value: number, initialized?:boolean) {
+    function sweep(value: number, initialized?: boolean) {
       if (state.fArr[0].indexOf(value) > -1) {
         return;
       }
@@ -327,6 +324,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     this.setState({fArr: tempFlagArr});
   }
 
+  // Set game over state and call interval clearing function
   gameOver = () => {
     this.setState({gameOver: true});
     clearInterval(this.state.intervalID);
@@ -361,6 +359,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     }
   }
 
+  // Reset State
   reset = () => {
     clearInterval(this.state.intervalID);
     this.setState({
@@ -380,6 +379,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     });
   }
 
+  // Pre-determined grid sizes that get passed as classes.
   gridSize = () => {
     switch (this.state.boardSize) {
       case 9:
@@ -395,6 +395,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     }
   }
 
+  // Render different icons depending on the state of the index
   colorRender = (item: number) => {
     let index = this.state.cArr[item];
 
@@ -448,6 +449,7 @@ class Game extends React.Component<{diff: number}, GameState>{
     }
   }
 
+  // Function that will return a different sprite depending on the provided value.
   switchVals = (val: number) => {
     switch (val) {
       case 0:
@@ -476,7 +478,7 @@ class Game extends React.Component<{diff: number}, GameState>{
   digitRender = (state: number) => {
     let d_3: number = Math.floor((state / 100) % 10);
     let d_2: number = Math.floor((state / 10) % 10);
-    let d_1: number = Math.floor((state/ 1) % 10);
+    let d_1: number = Math.floor((state / 1) % 10);
     let cases: Array<string> = ['h', 't', 'o'];
     let rVal1, rVal2, rVal3;
 
