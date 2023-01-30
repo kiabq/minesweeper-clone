@@ -16,7 +16,7 @@ There are few problems with this clone:
 3. Small micro-issues with the UI. The buttons are not as interactive as they were in the original version. With a tweaking of CSS and the Dropdown TSX code, it can be changed.
 
 ## Install
-<a href="minesweeper98.netlify.app" target="_blank">View Site</a>
+<a href="https://minesweeper98.netlify.app" target="_blank">View Site</a>
 
 - Clone repository into directory of your choice.
 - (for package dependencies) ``` npm install ``` in installed  directory.
