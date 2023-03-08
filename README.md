@@ -23,7 +23,6 @@ There are few problems with this clone:
 - From CLI, run ``` npm start ``` in installed directory.
 
 ## TODO
-- Fix Memory Leak caused by not cleaning up componentDidMount in Game.tsx.
 - Finish ```<Rules />``` component
 - Update README.md
 - Add animations and styling
